@@ -84,5 +84,5 @@ Several descriptors are combined together to create new descriptors with the fol
 * `merges` are deep merged: `descr.merges = _.merge({}, descr1.merges, descr2.merges)`
 * `runners` are stacked: `descr.runs = descr1.runs.concat(descr1.runs)`
 * `statics` are shallow mixed: `descr.statics = _.assign({}, descr1.statics, descr2.statics)`
-* `propertyDescriptors` are deep merged: `descr.propertyDescriptors = _.assign({}, descr1.propertyDescriptors, descr2.propertyDescriptors)`
+* `propertyDescriptors` are deep merged using `Object.defineProperties`: `descr.propertyDescriptors = _.describe({}, descr1.propertyDescriptors, descr2.propertyDescriptors)`
 * `configs` are deep merged: `descr.configs = _.merge({}, descr1.configs, descr2.configs)`
