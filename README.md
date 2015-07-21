@@ -56,7 +56,7 @@ New stamps can be created by calling a standalone `compose()` function.
 The names and definitions of the fixed properties that form the stamp descriptor. The stamp descriptor properties are made available on each stamp as `stamp.compose.*`
 
 * `methods` - A set of methods that will be added to the object's delegate prototype.
-* `references` - A set of properties that will be added to new object instances by assignment.
+* `properties` - A set of properties that will be added to new object instances by assignment.
 * `deepProperties` - A set of properties that will be added to new object instances by assignment with deep property merge.
 * `initializers` - A set of functions that will run in sequence and passed the data necessary to initialize a stamp instance.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
