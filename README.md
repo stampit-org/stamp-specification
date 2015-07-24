@@ -64,9 +64,9 @@ The names and definitions of the fixed properties that form the stamp descriptor
 * `propertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
-#### Combining descriptors
+#### Composing descriptors
 
-Descriptors are combined together to create new descriptors with the following rules:
+Descriptors are composed together to create new descriptors with the following rules:
 
 * `methods` are shallow mixed: `descr.methods = _.assign({}, descr1.methods, descr2.methods)`
 * `properties` are shallow mixed: `descr.properties = _.assign({}, descr1.properties, descr2.properties)`
