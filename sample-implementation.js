@@ -45,12 +45,12 @@ function stamp(descriptor) {
     const descriptor = composable.compose;
      // context is what initializers will bind to.
     const context = _.isObject(instance) ? instance : Object.create(descriptor.methods || null);
-    _.merge(context, composable.compose.deepProperties);
-    _.assign(context, composable.compose.properties); // properties are taking over deep props.
-    // TODO: apply propertyDescriptors here
+    _.merge(context, descriptor.deepProperties);
+    _.assign(context, descriptor.properties); // properties are taking over deep props.
+    Object.defineProperties(context, descriptor.propertyDescriptors);
     // TODO: apply configuration?
     let newInstance = _.isUndefined(instance) ? context : instance;
-    (composable.compose.initializers || []).forEach((init) => {
+    (descriptor.initializers || []).forEach((init) => {
       if (!_.isFunction(init)) {
         return;
       }
