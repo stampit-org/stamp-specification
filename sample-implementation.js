@@ -14,7 +14,28 @@ export function isDescriptor(obj) {
   return _.isObject(obj);
 }
 function mixDescriptors(...args) {
-  return _.merge({}, ...args); // temporary implementation. The real code should be much different.
+  const descr = {
+    methods: {},
+    properties: {},
+    deepProperties: {},
+    initializers: [],
+    staticProperties: {},
+    propertyDescriptors: {},
+    configuration: {},
+  };
+  _.forEach(args, (d) => {
+    if (!isDescriptor(d)) {
+      return;
+    }
+    _.assign(descr.methods, d.methods);
+    _.assign(descr.properties, d.properties);
+    _.assign(descr.deepProperties, d.deepProperties);
+    descr.initializers = descr.initializers.concat(d.initializers);
+    _.assign(descr.staticProperties, d.staticProperties);
+    _.assign(descr.propertyDescriptors, d.propertyDescriptors);
+    _.assign(descr.configuration, d.configuration);
+  });
+  return descr;
 }
 
 // Internal function. Used to create composable factories.
@@ -24,12 +45,15 @@ function stamp(descriptor) {
     const descriptor = composable.compose;
      // context is what initializers will bind to.
     const context = _.isObject(instance) ? instance : Object.create(descriptor.methods || null);
-    _.merge(context, composable.compose.deepProperties);
-    _.assign(context, composable.compose.references); // references are taking over deep props.
-    // TODO: apply propertyDescriptors here
+    _.merge(context, descriptor.deepProperties);
+    _.assign(context, descriptor.properties); // properties are taking over deep props.
+    Object.defineProperties(context, descriptor.propertyDescriptors);
     // TODO: apply configuration?
     let newInstance = _.isUndefined(instance) ? context : instance;
-    (composable.compose.initializers || []).forEach((init) => {
+    (descriptor.initializers || []).forEach((init) => {
+      if (!_.isFunction(init)) {
+        return;
+      }
       const result = init.call(context, {instance: newInstance, stamp: composable, args});
       if (!_.isUndefined(result)) {
         newInstance = result;
@@ -43,8 +67,8 @@ function stamp(descriptor) {
 
   // The stamp descriptor, aka stamp.compose().
   // The .bind() creates a new  instance of the compose() function.
-  // Taking over a possible static function 'compose'.
-  composable.compose = _.assign(compose.bind(), descriptor);
+  // Overwriting a possible static function '.compose'.
+  composable.compose = _.assign(compose.bind(composable), descriptor);
 
   return composable;
 }
@@ -59,7 +83,9 @@ export default function compose(...args) {
       return arg;
     }
   });
-  descriptors.unshift(this);
+  if (this) {
+    descriptors.unshift(this);
+  }
 
   return stamp(mixDescriptors(descriptors));
 }
