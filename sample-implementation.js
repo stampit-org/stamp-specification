@@ -29,11 +29,11 @@ function mixDescriptors(...args) {
     }
     _.assign(descr.methods, d.methods);
     _.assign(descr.properties, d.properties);
-    _.assign(descr.deepProperties, d.deepProperties);
+    _.merge(descr.deepProperties, d.deepProperties);
     descr.initializers = descr.initializers.concat(d.initializers);
     _.assign(descr.staticProperties, d.staticProperties);
-    _.assign(descr.propertyDescriptors, d.propertyDescriptors);
-    _.assign(descr.configuration, d.configuration);
+    _.merge(descr.propertyDescriptors, d.propertyDescriptors);
+    _.merge(descr.configuration, d.configuration);
   });
   return descr;
 }
