@@ -43,12 +43,40 @@ function stamp(descriptor) {
   // Creating the composable factory, aka stamp.
   const composable = function composable(instance, ...args) {
     const descriptor = composable.compose;
-     // context is what initializers will bind to.
-    const context = _.isObject(instance) ? instance : Object.create(descriptor.methods || null);
+
+    // context is what initializers will bind to. Also, it can become a new object if instance arg was not given.
+    let context = Object.create(descriptor.methods || null);
+
+    // Step 1. methods
+    if (!_.isUndefined(instance)) {
+       // user has passed an argument. Checking if it can have prototype.
+      if (_.isObject(instance)) {
+        // instance can be bound to. Thus it can serve as a context for initializers
+        context = instance;
+
+        // Replacing the prototype of the given instance if there are methods in this descriptor.
+        if (!_.isEmpty(descriptor.methods)) {
+          // Also we should not change any existing prototypes of any existing methods.
+          if (Object.getPrototypeOf(instance) === Object.prototype) {
+            instance.__proto__ = descriptor.methods;
+          } else {
+            // The given instance already has a prototype. Thus we assign methods straight into the instance.
+            _.assign(instance, descriptor.methods);
+          }
+        }
+      }
+    }
+
+    // Step 2. deepProperties
     _.merge(context, descriptor.deepProperties);
+
+    // Step 3. properties
     _.assign(context, descriptor.properties); // properties are taking over deep props.
+
+    // Step 4. propertyDescriptors
     Object.defineProperties(context, descriptor.propertyDescriptors);
-    // TODO: apply configuration?
+
+    // Step 5. initializers
     let newInstance = _.isUndefined(instance) ? context : instance;
     (descriptor.initializers || []).forEach((init) => {
       if (!_.isFunction(init)) {
@@ -59,6 +87,7 @@ function stamp(descriptor) {
         newInstance = result;
       }
     });
+
     return newInstance;
   };
 
