@@ -57,11 +57,11 @@ function stamp(descriptor) {
         // Replacing the prototype of the given instance if there are methods in this descriptor.
         if (!_.isEmpty(descriptor.methods)) {
           // Also we should not change any existing prototypes of any existing methods.
-          if (Object.getPrototypeOf(instance) === Object.prototype) {
-            instance.__proto__ = descriptor.methods;
+          if (Object.getPrototypeOf(context) === Object.prototype) {
+            context.__proto__ = descriptor.methods;
           } else {
             // The given instance already has a prototype. Thus we assign methods straight into the instance.
-            _.assign(instance, descriptor.methods);
+            _.assign(context, descriptor.methods);
           }
         }
       }
