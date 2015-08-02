@@ -62,7 +62,6 @@ The names and definitions of the fixed properties that form the stamp descriptor
 * `initializers` - A set of functions that will run in sequence and passed the data necessary to initialize a stamp instance.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
 * `propertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors
-* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
 #### Composing descriptors
 
@@ -74,4 +73,3 @@ Descriptors are composed together to create new descriptors with the following r
 * `initializers` are stacked: `descr.initializers = descr1.initializers.concat(descr1.initializers)`
 * `staticProperties` are shallow mixed: `descr.staticProperties = _.assign({}, descr1.staticProperties, descr2.staticProperties)`
 * `propertyDescriptors` are deep merged: `descr.propertyDescriptors = _.merge({}, descr1.propertyDescriptors, descr2.propertyDescriptors)`
-* `configuration` are deep merged: `descr.configuration = _.merge({}, descr1.configuration, descr2.configuration)`

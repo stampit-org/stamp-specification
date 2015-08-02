@@ -21,7 +21,6 @@ function mixDescriptors(...args) {
     initializers: [],
     staticProperties: {},
     propertyDescriptors: {},
-    configuration: {},
   };
   _.forEach(args, (d) => {
     if (!isDescriptor(d)) {
@@ -33,7 +32,6 @@ function mixDescriptors(...args) {
     descr.initializers = descr.initializers.concat(d.initializers);
     _.assign(descr.staticProperties, d.staticProperties);
     _.merge(descr.propertyDescriptors, d.propertyDescriptors);
-    _.merge(descr.configuration, d.configuration);
   });
   return descr;
 }
