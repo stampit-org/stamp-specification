@@ -1,6 +1,9 @@
 # Composables specification
 
-## Compatibility between different implementations
+## Introduction
+
+The composables specification exists in order to define a standard format for composable factory functions (called **stamps**). It exists to ensure compatibility between different stamp implementations.
+
 
 ### Composable
 
