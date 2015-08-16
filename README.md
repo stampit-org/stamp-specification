@@ -55,12 +55,8 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 
 ### Stamp
 
-* `stamp([instance], args...) => objectInstance` **Creates or mutates object instances.** Take a base object and any number of arguments.
-Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object.
-Stamps with function or array base objects should not extend the built-in prototypes for `Object` or `Array`.
-  * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables (i.e., stamps).*
-    Take any number of stamps or descriptors, create and return a new stamp that encapsulates combined behavior
-    of `this` and the arguments. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
+* `stamp(baseObject, args...) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object. If present an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to the base object itself.
+ * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables (i.e., stamps)* identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
 
 
 ## The Stamp Descriptor
