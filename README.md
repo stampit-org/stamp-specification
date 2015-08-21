@@ -2,12 +2,12 @@
 
 ## Introduction
 
-The composables specification exists in order to define a standard format for composable factory functions (called **stamps**). It exists to ensure compatibility between different stamp implementations.
+The composables specification exists in order to define a standard format for composable factory functions (called **stamps**), and ensure compatibility between different stamp implementations.
 
 
 ### Composable
 
-**Composable** is a factory function. It returns object instances based on its **descriptor**.
+**Composable** (aka **stamp**) is a composable factory function that returns object instances based on its **descriptor**.
 
 ```js
 assert(typeof composable === 'function');
@@ -20,19 +20,15 @@ It has property `.compose` which is also a function.
 assert(typeof composable.compose === 'function');
 ```
 
-When called the `.compose` function creates **new** *composables* based on the current and a given list of *composables*.
+When called the `.compose` function creates new composable using the current composable as a base, composed with a list of *composables* passed as arguments.
 ```js
-const combinedComposable = composable0.compose(composable1, composable2, composable3);
+const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
 ```
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object.
-It's a collection of properties that contain the information necessary to create an object instance by a *composable*.
+**Composable descriptor** (or just **Descriptor**) is a meta data object with properties that contain the information necessary to create an object instance.
 
-### Stamp
-
-**Stamp** is a *composable* with a fixed *descriptor* mixed into the `.compose` function.
 
 
 ### Standalone `compose()` function (optional)
@@ -40,23 +36,13 @@ It's a collection of properties that contain the information necessary to create
 * `compose(...stampsOrDescriptors) => stamp` **Creates stamps.** Take any number of stamps or descriptors.
 Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
 
------
-
-## Similarities with Promises (aka Thenables)
-
-* *Thenable* ~ *Composable*.
-* `.then` ~ `.compose`.
-* *Promise* ~ *Stamp*.
-* `new Promise(resolve, reject)` ~ `compose(...stampsOrDescriptors)`
-
------
 
 ## Implementation details
 
 ### Stamp
 
-* `stamp(baseObject, args...) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object. If present an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to the base object itself.
- * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables (i.e., stamps)* identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
+* `stamp(baseObject, args...) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object. If present, an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to the base object itself.
+ * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
 
 
 ## The Stamp Descriptor
@@ -67,22 +53,20 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 * `methods` - A set of methods that will be added to the object's delegate prototype.
 * `properties` - A set of properties that will be added to new object instances by assignment.
 * `deepProperties` - A set of properties that will be added to new object instances by assignment with deep property merge.
-* `initializers` - A set of functions that will run in sequence and passed the data necessary to initialize a stamp instance.
+* `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
 * `propertyDescriptors` - A set of [object property
-descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties)
-used for fine-grained control over object property behaviors
-* `configuration` - A set of options made available to the stamp and its initializers during object instance creation.
-Configuration properties get deep merged.
+descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
+* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
 #### Composing descriptors
 
 Descriptors are composed together to create new descriptors with the following rules:
 
-* `methods` are shallow mixed: `descr.methods = _.assign({}, descr1.methods, descr2.methods)`
-* `properties` are shallow mixed: `descr.properties = _.assign({}, descr1.properties, descr2.properties)`
-* `deepProperties` are deep merged: `descr.deepProperties = _.merge({}, descr1.deepProperties, descr2.deepProperties)`
-* `initializers` are stacked: `descr.initializers = descr1.initializers.concat(descr1.initializers)`
-* `staticProperties` are shallow mixed: `descr.staticProperties = _.assign({}, descr1.staticProperties, descr2.staticProperties)`
-* `propertyDescriptors` are deep merged: `descr.propertyDescriptors = _.merge({}, descr1.propertyDescriptors, descr2.propertyDescriptors)`
-* `configuration` are deep merged: `descr.configuration = _.merge({}, descr1.configuration, descr2.configuration)`
+* `methods` are copied by assignment: `stamp.methods = _.assign({}, stamp1.methods, stamp2.methods)`
+* `properties` are copied by assignment: `stamp.properties = _.assign({}, stamp1.properties, stamp2.properties)`
+* `deepProperties` are deep merged: `stamp.deepProperties = _.merge({}, stamp1.deepProperties, stamp2.deepProperties)`
+* `initializers` are appended: `stamp.initializers = stamp1.initializers.concat(stamp2.initializers)`
+* `staticProperties` are copied by assignment: `stamp.staticProperties = _.assign({}, stamp1.staticProperties, stamp2.staticProperties)`
+* `propertyDescriptors` are deep merged: `stamp.propertyDescriptors = _.merge({}, stamp1.propertyDescriptors, stamp2.propertyDescriptors)`
+* `configuration` are deep merged: `stamp.configuration = _.merge({}, stamp1.configuration, stamp2.configuration)`
