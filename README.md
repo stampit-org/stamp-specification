@@ -63,10 +63,22 @@ descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 
 Descriptors are composed together to create new descriptors with the following rules:
 
-* `methods` are copied by assignment: `stamp.methods = _.assign({}, stamp1.methods, stamp2.methods)`
-* `properties` are copied by assignment: `stamp.properties = _.assign({}, stamp1.properties, stamp2.properties)`
-* `deepProperties` are deep merged: `stamp.deepProperties = _.merge({}, stamp1.deepProperties, stamp2.deepProperties)`
-* `initializers` are appended: `stamp.initializers = stamp1.initializers.concat(stamp2.initializers)`
-* `staticProperties` are copied by assignment: `stamp.staticProperties = _.assign({}, stamp1.staticProperties, stamp2.staticProperties)`
-* `propertyDescriptors` are deep merged: `stamp.propertyDescriptors = _.merge({}, stamp1.propertyDescriptors, stamp2.propertyDescriptors)`
-* `configuration` are deep merged: `stamp.configuration = _.merge({}, stamp1.configuration, stamp2.configuration)`
+* `methods` are copied by assignment: `descriptor.methods = _.assign({}, descriptor1.methods, descriptor2.methods)`
+* `properties` are copied by assignment: `descriptor.properties = _.assign({}, descriptor1.properties, descriptor2.properties)`
+* `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
+* `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
+* `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
+* `propertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
+* `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
+
+
+-----
+
+## Similarities with Promises (aka Thenables)
+
+* *Thenable* ~ *Composable*.
+* `.then` ~ `.compose`.
+* *Promise* ~ *Stamp*.
+* `new Promise(resolve, reject)` ~ `compose(...stampsOrDescriptors)`
+
+-----
