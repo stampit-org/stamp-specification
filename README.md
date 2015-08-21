@@ -57,6 +57,8 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
 * `propertyDescriptors` - A set of [object property
 descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
+* `staticPropertyDescriptors` - A set of [object property
+descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
 #### Composing descriptors
@@ -69,6 +71,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
 * `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
 * `propertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
+* `staticyPropertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
 
 
