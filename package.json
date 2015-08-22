@@ -23,13 +23,10 @@
     "url": "https://github.com/stampit-org/stamp-specification/issues"
   },
   "homepage": "https://github.com/stampit-org/stamp-specification#readme",
-  "dependencies": {
-    "babel": "^5.6.23",
-    "lodash": "^3.10.0",
-    "tape": "^4.0.0"
-  },
   "devDependencies": {
     "dotty": "0.0.2",
-    "tape": "^4.2.0"
+    "tape": "^4.2.0",
+    "babel": "^5.6.23",
+    "lodash": "^3.10.0"
   }
 }

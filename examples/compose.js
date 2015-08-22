@@ -1,4 +1,5 @@
 import dotty from 'dotty';
+import merge from 'lodash/object/merge';
 
 const getDescriptorProps = (descriptorName, composables) => {
   return composables.map(composable => {
@@ -14,12 +15,12 @@ function compose (...composables) {
   Object.assign(composable.compose, {
     methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
     properties: Object.assign({}, ...getDescriptorProps('properties', composables)),
-    deepProperties: {},
+    deepProperties: merge({}, ...getDescriptorProps('deepProperties', composables)),
     initializers: [],
     staticProperties: {},
     propertyDescriptors: Object.assign({}, ...getDescriptorProps('propertyDescriptors', composables)),
     staticPropertyDescriptors: Object.assign({}, ...getDescriptorProps('staticPropertyDescriptors', composables)),
-    configuration: {}
+    configuration: merge({}, ...getDescriptorProps('configuration', composables))
   });
 
   return composable;
