@@ -45,7 +45,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
  * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
 
 
-## The Stamp Descriptor
+### The Stamp Descriptor
 
 The names and definitions of the fixed properties that form the stamp descriptor.
 The stamp descriptor properties are made available on each stamp as `stamp.compose.*`
@@ -72,6 +72,22 @@ Descriptors are composed together to create new descriptors with the following r
 * `propertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `staticPropertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
+
+### Initializer parameters
+
+Initializers are passed an `options` argument containing:
+
+```js
+{
+  instance,
+  stamp,
+  args
+}
+```
+
+* `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance.
+* `stamp` A reference to the stamp producing the instance.
+* `args` Any arguments passed to the stamp function.
 
 
 -----
