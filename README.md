@@ -69,8 +69,8 @@ Descriptors are composed together to create new descriptors with the following r
 * `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
 * `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
 * `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
-* `propertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
-* `staticPropertyDescriptors` are deep merged: `descriptor.propertyDescriptors = _.merge({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
+* `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
+* `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
 
 
