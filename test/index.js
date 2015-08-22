@@ -1,5 +1,6 @@
 import test from 'tape';
 import compose from '../examples/compose';
+import assignmentTests from './assignment-tests';
 
 test('compose function', (assert) => {
   const actual = typeof compose;
@@ -98,8 +99,6 @@ test('compose.configuration', (assert) => {
   assert.end();
 });
 
-
-import methods from './methods';
 
 // stamp instances
 /*

@@ -8,18 +8,17 @@ const getDescriptorProps = (descriptorName, composables) => {
 
 function compose (...composables) {
   const composable = {};
-  const methods = getDescriptorProps('methods', composables);
 
   composable.compose = (...args) => {};
 
   Object.assign(composable.compose, {
-    methods: Object.assign({}, ...methods),
-    properties: {},
+    methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
+    properties: Object.assign({}, ...getDescriptorProps('properties', composables)),
     deepProperties: {},
     initializers: [],
     staticProperties: {},
-    propertyDescriptors: {},
-    staticPropertyDescriptors: {},
+    propertyDescriptors: Object.assign({}, ...getDescriptorProps('propertyDescriptors', composables)),
+    staticPropertyDescriptors: Object.assign({}, ...getDescriptorProps('staticPropertyDescriptors', composables)),
     configuration: {}
   });
 
