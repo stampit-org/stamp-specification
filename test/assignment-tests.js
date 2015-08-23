@@ -4,6 +4,7 @@ import compose from '../examples/compose';
 const assignmentProps = [
   'methods',
   'properties',
+  'staticProperties',
   'propertyDescriptors',
   'staticPropertyDescriptors'
 ];

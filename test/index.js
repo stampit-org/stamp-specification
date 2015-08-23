@@ -2,6 +2,7 @@ import test from 'tape';
 import compose from '../examples/compose';
 import assignmentTests from './assignment-tests';
 import mergeTests from './merge-tests';
+import initializerTests from './initializer-tests';
 
 test('compose function', (assert) => {
   const actual = typeof compose;
@@ -14,7 +15,7 @@ test('compose function', (assert) => {
 });
 
 test('compose.methods', (assert) => {
-  const actual = !!compose().compose.methods;
+  const actual = Boolean(compose().compose.methods);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -25,7 +26,7 @@ test('compose.methods', (assert) => {
 
 
 test('compose.properties', (assert) => {
-  const actual = !!compose().compose.properties;
+  const actual = Boolean(compose().compose.properties);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -36,7 +37,7 @@ test('compose.properties', (assert) => {
 
 
 test('compose.deepProperties', (assert) => {
-  const actual = !!compose().compose.deepProperties;
+  const actual = Boolean(compose().compose.deepProperties);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -47,7 +48,7 @@ test('compose.deepProperties', (assert) => {
 
 
 test('compose.initializers', (assert) => {
-  const actual = !!compose().compose.initializers;
+  const actual = Boolean(compose().compose.initializers);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -58,7 +59,7 @@ test('compose.initializers', (assert) => {
 
 
 test('compose.staticProperties', (assert) => {
-  const actual = !!compose().compose.staticProperties;
+  const actual = Boolean(compose().compose.staticProperties);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -69,7 +70,7 @@ test('compose.staticProperties', (assert) => {
 
 
 test('compose.propertyDescriptors', (assert) => {
-  const actual = !!compose().compose.propertyDescriptors;
+  const actual = Boolean(compose().compose.propertyDescriptors);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -80,7 +81,7 @@ test('compose.propertyDescriptors', (assert) => {
 
 
 test('compose.staticPropertyDescriptors', (assert) => {
-  const actual = !!compose().compose.staticPropertyDescriptors;
+  const actual = Boolean(compose().compose.staticPropertyDescriptors);
   const expected = true;
 
   assert.equal(actual, expected,
@@ -91,7 +92,7 @@ test('compose.staticPropertyDescriptors', (assert) => {
 
 
 test('compose.configuration', (assert) => {
-  const actual = !!compose().compose.configuration;
+  const actual = Boolean(compose().compose.configuration);
   const expected = true;
 
   assert.equal(actual, expected,

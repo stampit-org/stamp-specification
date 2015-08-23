@@ -16,8 +16,8 @@ function compose (...composables) {
     methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
     properties: Object.assign({}, ...getDescriptorProps('properties', composables)),
     deepProperties: merge({}, ...getDescriptorProps('deepProperties', composables)),
-    initializers: [],
-    staticProperties: {},
+    initializers: [].concat(...getDescriptorProps('initializers', composables)),
+    staticProperties: Object.assign({}, ...getDescriptorProps('staticProperties', composables)),
     propertyDescriptors: Object.assign({}, ...getDescriptorProps('propertyDescriptors', composables)),
     staticPropertyDescriptors: Object.assign({}, ...getDescriptorProps('staticPropertyDescriptors', composables)),
     configuration: merge({}, ...getDescriptorProps('configuration', composables))
