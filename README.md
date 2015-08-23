@@ -15,7 +15,7 @@ assert(typeof composable === 'function');
 const newObject = composable();
 ```
 
-It has property `.compose()` which is also a function:
+It has method called `.compose()`:
 
 ```js
 assert(typeof composable.compose === 'function');
@@ -29,7 +29,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object with properties that contain the information necessary to create an object instance.
+**Composable descriptor** (or just **Descriptor**) is a meta data object with properties that contain the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method.
 
 
 
@@ -44,7 +44,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 ### Stamp
 
 * `stamp(baseObject, args...) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object. If present, an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to the base object itself.
- * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., i.e. `stamp.compose.*`
+ * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** *A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
 
 
 ### The Stamp Descriptor
