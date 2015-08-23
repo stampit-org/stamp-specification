@@ -15,12 +15,14 @@ assert(typeof composable === 'function');
 const newObject = composable();
 ```
 
-It has property `.compose` which is also a function.
+It has property `.compose()` which is also a function:
+
 ```js
 assert(typeof composable.compose === 'function');
 ```
 
-When called the `.compose` function creates new composable using the current composable as a base, composed with a list of *composables* passed as arguments.
+When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* passed as arguments:
+
 ```js
 const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
 ```
