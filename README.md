@@ -1,4 +1,4 @@
-# Composables specification
+# Stamp Specification: Composables
 
 ## Introduction
 
