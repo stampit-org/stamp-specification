@@ -4,6 +4,9 @@
 
 The composables specification exists in order to define a standard format for composable factory functions (called **stamps**), and ensure compatibility between different stamp implementations.
 
+## Status
+
+This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use.
 
 ### Composable
 
@@ -43,8 +46,8 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 
 ### Stamp
 
-* `stamp(baseObject, args...) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance back. If no first argument is passed, it uses a new empty object as the base object. If present, an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to the base object itself.
- * `.compose(stampsOrDescriptors...) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
+* `stamp({ baseObject }, ...args) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance. If no `baseObject` is passed, it uses a new empty object as the base object. If present, an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
+ * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
 
 
 ### The Stamp Descriptor
