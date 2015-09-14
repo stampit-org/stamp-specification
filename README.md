@@ -46,7 +46,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 
 ### Stamp
 
-* `stamp({ baseObject }, ...args) => objectInstance` **Creates object instances.** Take a base object and any number of arguments. Return the mutated `baseObject` instance. If no `baseObject` is passed, it uses a new empty object as the base object. If present, an existing prototype of the base object must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
+* `stamp(options) => instance` **Creates or mutates object instances.** Take an options object which may contain an `.instance` property. Return the mutated instance. If no instance is passed, it uses a new empty object as the instance. If present, the existing prototype of the instance must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
  * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
 
 
@@ -78,6 +78,17 @@ Descriptors are composed together to create new descriptors with the following r
 * `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
 
+
+### Stamp `options` reserved keys
+
+The following are reserved keys for the stamp options object:
+
+```js
+{
+  instance // The object to be mutated by the stamp
+}
+```
+
 ### Initializer parameters
 
 Initializers are passed an `options` argument containing:
@@ -86,13 +97,13 @@ Initializers are passed an `options` argument containing:
 {
   instance,
   stamp,
-  args
+  options
 }
 ```
 
 * `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
-* `args` Any arguments passed to the stamp function.
+* `options` An object containing propreties that may be used by initializers.
 
 
 -----
