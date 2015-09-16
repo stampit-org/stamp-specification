@@ -1,23 +1,52 @@
 import test from 'tape';
 import compose from '../examples/compose';
 
-export default (() => {
 
-  const build = (num) => {
+const build = (num) => {
 
-    const compose = {
-      initializers: [num]
-    };
+  const compose = {
+    initializers: [() => {
+      return { num };
+    }]
+  };
 
-    return { compose };
-  }
+  return { compose };
+}
+
+const buildInitializers = () => {
+
+  return {
+    compose: {
+      initializers: [
+        ({ instance }) => {
+          return Object.assign(instance, {
+            a: 'a',
+            override: 'a'
+          });
+        },
+        ({ instance }) => {
+          return Object.assign(instance, {
+            b: 'b'
+          });
+        },
+        ({ instance }) => {
+          return Object.assign(instance, {
+            override: 'c'
+          });
+        }
+      ]
+    }
+  };
+}
 
 
-  test(`initilazer 1`, (assert) => {
+test('compose()', nest => {
+
+  nest.test(`...with two initializers`, assert => {
     const subject = compose(build(1), build(2));
     const initializers = subject.compose.initializers;
 
-    const actual = initializers[0];
+    const actual = initializers[0]().num;
     const expected = 1;
 
     assert.equal(actual, expected,
@@ -26,11 +55,11 @@ export default (() => {
     assert.end();
   });
 
-  test(`initilazer 2`, (assert) => {
+  nest.test(`...with two initializers`, assert => {
     const subject = compose(build(1), build(2));
     const initializers = subject.compose.initializers;
 
-    const actual = initializers[1];
+    const actual = initializers[1]().num;
     const expected = 2;
 
     assert.equal(actual, expected,
@@ -39,11 +68,11 @@ export default (() => {
     assert.end();
   });
 
-  test(`initilazer 2`, (assert) => {
+  nest.test(`...with three initializers`, assert => {
     const subject = compose(build(1), build(2), build(3));
     const initializers = subject.compose.initializers;
 
-    const actual = initializers[2];
+    const actual = initializers[2]().num;
     const expected = 3;
 
     assert.equal(actual, expected,
@@ -51,5 +80,22 @@ export default (() => {
 
     assert.end();
   });
+});
 
-}());
+test('stamp()', nest => {
+  nest.test('...with initializers', assert => {
+    const stamp = buildInitializers();
+
+    const actual = compose(stamp)();
+    const expected = {
+      a: 'a',
+      b: 'b',
+      override: 'c'
+    };
+
+    assert.deepEqual(actual, expected,
+      'should apply initializers with last-in priority');
+
+    assert.end();
+  });
+});

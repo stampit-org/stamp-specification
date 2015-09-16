@@ -1,8 +1,9 @@
 import test from 'tape';
 import compose from '../examples/compose';
-import assignmentTests from './assignment-tests';
-import mergeTests from './merge-tests';
-import initializerTests from './initializer-tests';
+import './assignment-tests';
+import './merge-tests';
+import './initializer-tests';
+import './stamp-tests';
 
 test('compose function', (assert) => {
   const actual = typeof compose;

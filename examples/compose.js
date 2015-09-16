@@ -1,18 +1,15 @@
-import dotty from 'dotty';
 import merge from 'lodash/object/merge';
+import map from 'lodash/collection/map';
 
 const getDescriptorProps = (descriptorName, composables) => {
-  return composables.map(composable => {
-    return dotty.get(composable, 'compose.' + descriptorName);
-  });
+  return map(composables, 'compose.' + descriptorName);
 };
 
 function compose (...composables) {
-  const composable = {};
 
-  composable.compose = (...args) => {};
+  const composeMethod = () => {};
 
-  Object.assign(composable.compose, {
+  Object.assign(composeMethod, {
     methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
     properties: Object.assign({}, ...getDescriptorProps('properties', composables)),
     deepProperties: merge({}, ...getDescriptorProps('deepProperties', composables)),
@@ -22,6 +19,19 @@ function compose (...composables) {
     staticPropertyDescriptors: Object.assign({}, ...getDescriptorProps('staticPropertyDescriptors', composables)),
     configuration: merge({}, ...getDescriptorProps('configuration', composables))
   });
+
+  const composable = ({
+    instance = {}
+  } = {}) => {
+
+    composeMethod.initializers.forEach(initializer => {
+      initializer({ instance });
+    });
+
+    return instance;
+  };
+
+  composable.compose = composeMethod;
 
   return composable;
 };
