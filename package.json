@@ -4,8 +4,9 @@
   "description": "The Composables specification",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint examples && eslint test",
     "test": "babel-node test/index.js",
-    "watch": "watch 'npm test' test/ examples/"
+    "watch": "watch 'npm run lint && npm test' test/ examples/"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,9 @@
   "homepage": "https://github.com/stampit-org/stamp-specification#readme",
   "devDependencies": {
     "babel": "^5.6.23",
+    "babel-eslint": "^4.1.2",
     "dotty": "0.0.2",
+    "eslint": "^1.4.3",
     "lodash": "^3.10.0",
     "tape": "^4.2.0",
     "watch": "^0.16.0"

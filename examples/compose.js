@@ -7,7 +7,9 @@ const getDescriptorProps = (descriptorName, composables) => {
 
 function compose (...composables) {
 
-  const composeMethod = () => {};
+  const composeMethod = function (...args) {
+    return compose(this, ...args);
+  };
 
   Object.assign(composeMethod, {
     methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
@@ -21,8 +23,8 @@ function compose (...composables) {
   });
 
   const composable = ({
-    instance = {}
-  } = {}) => {
+      instance = {}
+    } = {}) => {
 
     composeMethod.initializers.forEach(initializer => {
       initializer({ instance });
@@ -34,6 +36,6 @@ function compose (...composables) {
   composable.compose = composeMethod;
 
   return composable;
-};
+}
 
 export default compose;

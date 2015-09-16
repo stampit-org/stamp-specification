@@ -4,14 +4,14 @@ import compose from '../examples/compose';
 
 const build = (num) => {
 
-  const compose = {
+  const composable = {
     initializers: [() => {
       return { num };
     }]
   };
 
-  return { compose };
-}
+  return { compose: composable };
+};
 
 const buildInitializers = () => {
 
@@ -37,7 +37,7 @@ const buildInitializers = () => {
       ]
     }
   };
-}
+};
 
 
 test('compose()', nest => {
