@@ -98,4 +98,28 @@ test('stamp()', nest => {
 
     assert.end();
   });
+
+  nest.test('...with `this` in initializer', assert => {
+    const stamp = compose({
+      compose: {
+        initializers: [
+          function () {
+            return Object.assign(this, {
+              a: 'a'
+            });
+          }
+        ]
+      }
+    });
+
+    const actual = compose(stamp)();
+    const expected = {
+      a: 'a'
+    };
+
+    assert.deepEqual(actual, expected,
+      'should use object instance as `this` inside initializers');
+
+    assert.end();
+  });
 });
