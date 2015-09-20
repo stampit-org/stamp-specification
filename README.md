@@ -32,7 +32,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object which contain the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method, e.g. `.compose.methods`
+**Composable descriptor** (or just **Descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method, e.g. `.compose.methods`
 
 
 
