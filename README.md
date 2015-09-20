@@ -91,19 +91,15 @@ The following are reserved keys for the stamp options object:
 
 ### Initializer parameters
 
-Initializers are passed an `options` argument containing:
+Initializers have the following signature:
 
 ```js
-{
-  instance,
-  stamp,
-  options
-}
+(options, instance, stamp) => Instance
 ```
 
+* `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
 * `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
-* `options` An object containing propreties that may be used by initializers.
 
 
 -----
