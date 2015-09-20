@@ -24,7 +24,7 @@ It has method called `.compose()`:
 assert(typeof composable.compose === 'function');
 ```
 
-When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* passed as arguments:
+When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* (or *descriptors*) passed as arguments:
 
 ```js
 const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
@@ -32,7 +32,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object with properties that contain the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method.
+**Composable descriptor** (or just **Descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method, e.g. `.compose.methods`
 
 
 
@@ -47,7 +47,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 ### Stamp
 
 * `stamp(options) => instance` **Creates or mutates object instances.** Take an options object which may contain an `.instance` property. Return the mutated instance. If no instance is passed, it uses a new empty object as the instance. If present, the existing prototype of the instance must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
- * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
+ * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
 
 
 ### The Stamp Descriptor
@@ -109,6 +109,6 @@ Initializers have the following signature:
 * *Thenable* ~ *Composable*.
 * `.then` ~ `.compose`.
 * *Promise* ~ *Stamp*.
-* `new Promise(resolve, reject)` ~ `compose(...stampsOrDescriptors)`
+* `new Promise(function(resolve, reject))` ~ `compose(...stampsOrDescriptors)`
 
 -----
