@@ -94,7 +94,7 @@ The following are reserved keys for the stamp options object:
 Initializers have the following signature:
 
 ```js
-(options, { instance, stamp }) => Instance
+(options, { instance, stamp }) => instance
 ```
 
 * `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
