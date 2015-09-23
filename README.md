@@ -11,8 +11,8 @@ Official announcement and hands on training scheduled @ [WebDirections in Sydney
 This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use. 3 implementations are coming:
 
 * Reference Implementation
-* Stampit 3.0
-* react-stampit
+* [Stampit 3.0](https://github.com/stampit-org/stampit)
+* [react-stampit](https://github.com/stampit-org/react-stampit)
 
 ### Composable
 
