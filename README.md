@@ -6,7 +6,13 @@ The composables specification exists in order to define a standard format for co
 
 ## Status
 
-This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use.
+Official announcement and hands on training scheduled @ [WebDirections in Sydney, Australia Oct 27th](http://www.webdirections.org/wd15/#workshops).
+
+This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use. 3 implementations are coming:
+
+* Reference Implementation
+* [Stampit 3.0](https://github.com/stampit-org/stampit)
+* [react-stampit](https://github.com/stampit-org/react-stampit)
 
 ### Composable
 
@@ -24,7 +30,7 @@ It has method called `.compose()`:
 assert(typeof composable.compose === 'function');
 ```
 
-When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* passed as arguments:
+When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* (or *descriptors*) passed as arguments:
 
 ```js
 const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
@@ -32,7 +38,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object with properties that contain the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method.
+**Composable descriptor** (or just **Descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method, e.g. `.compose.methods`
 
 
 
@@ -47,7 +53,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 ### Stamp
 
 * `stamp(options) => instance` **Creates or mutates object instances.** Take an options object which may contain an `.instance` property. Return the mutated instance. If no instance is passed, it uses a new empty object as the instance. If present, the existing prototype of the instance must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
- * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method., e.g. `stamp.compose.properties`.
+ * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
 
 
 ### The Stamp Descriptor
@@ -91,19 +97,15 @@ The following are reserved keys for the stamp options object:
 
 ### Initializer parameters
 
-Initializers are passed an `options` argument containing:
+Initializers have the following signature:
 
 ```js
-{
-  instance,
-  stamp,
-  options
-}
+(options, { instance, stamp }) => instance
 ```
 
+* `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
 * `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
-* `options` An object containing propreties that may be used by initializers.
 
 
 -----
@@ -113,6 +115,6 @@ Initializers are passed an `options` argument containing:
 * *Thenable* ~ *Composable*.
 * `.then` ~ `.compose`.
 * *Promise* ~ *Stamp*.
-* `new Promise(resolve, reject)` ~ `compose(...stampsOrDescriptors)`
+* `new Promise(function(resolve, reject))` ~ `compose(...stampsOrDescriptors)`
 
 -----
