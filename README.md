@@ -66,6 +66,7 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 * `deepProperties` - A set of properties that will be added to new object instances by assignment with deep property merge.
 * `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
+* `deepStaticProperties` - A set of static properties that will be added to the stamp by assignment with deep property merge.
 * `propertyDescriptors` - A set of [object property
 descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
@@ -80,6 +81,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
 * `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
 * `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
+* `deepStaticProperties` are deep merged: descriptor.deepStaticProperties = _.merge({}, descriptor1.deepStaticProperties, descriptor2.deepStaticProperties)`
 * `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
