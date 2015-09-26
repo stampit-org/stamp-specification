@@ -56,21 +56,29 @@ const createStamp = descriptor => {
 
 
 function compose (...composables) {
+  const assign = Object.assign;
 
   const composeMethod = function (...args) {
     return compose({ compose: composeMethod }, ...args);
   };
 
-  Object.assign(composeMethod, {
-    methods: Object.assign({}, ...getDescriptorProps('methods', composables)),
-    properties: Object.assign({}, ...getDescriptorProps('properties', composables)),
-    deepProperties: merge({}, ...getDescriptorProps('deepProperties', composables)),
+  assign(composeMethod, {
+    methods: assign({}, ...getDescriptorProps('methods', composables)),
+    properties: assign({}, ...getDescriptorProps('properties', composables)),
+    deepProperties: merge({},
+      ...getDescriptorProps('deepProperties', composables)),
     initializers: [].concat(...getDescriptorProps('initializers', composables))
       .filter(initializer => initializer !== undefined),
-    staticProperties: Object.assign({}, ...getDescriptorProps('staticProperties', composables)),
-    propertyDescriptors: Object.assign({}, ...getDescriptorProps('propertyDescriptors', composables)),
-    staticPropertyDescriptors: Object.assign({}, ...getDescriptorProps('staticPropertyDescriptors', composables)),
-    configuration: merge({}, ...getDescriptorProps('configuration', composables))
+    staticProperties: assign({},
+      ...getDescriptorProps('staticProperties', composables)),
+    deepStaticProperties: merge({},
+      ...getDescriptorProps('deepStaticProperties', composables)),
+    propertyDescriptors: assign({},
+      ...getDescriptorProps('propertyDescriptors', composables)),
+    staticPropertyDescriptors: assign({},
+      ...getDescriptorProps('staticPropertyDescriptors', composables)),
+    configuration: merge({},
+      ...getDescriptorProps('configuration', composables))
   });
 
   const stamp = createStamp(composeMethod);

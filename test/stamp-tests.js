@@ -81,7 +81,9 @@ test('Stamp', nest => {
 
     assert.end();
   });
+});
 
+test('Stamp assignments', nest => {
   nest.test('...with properties', assert => {
     const stamp = compose({compose: {
       properties: {
@@ -98,19 +100,6 @@ test('Stamp', nest => {
 
     assert.deepEqual(actual, expected,
       'should create properties');
-
-    assert.end();
-  });
-
-  nest.test('...with methods', assert => {
-    const stamp = compose(buildMethods());
-    const proto = Object.getPrototypeOf(stamp());
-
-    const actual = proto.a();
-    const expected = 'a';
-
-    assert.deepEqual(actual, expected,
-      'should create methods on prototype');
 
     assert.end();
   });
