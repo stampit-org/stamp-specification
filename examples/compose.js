@@ -5,19 +5,44 @@ const getDescriptorProps = (descriptorName, composables) => {
   return map(composables, 'compose.' + descriptorName);
 };
 
-const createStamp = descriptor => {
-  return ({ instance } = {}) => {
-    const proto = {};
-    const obj = instance || {};
+const createInstanceWithProto = ({ instance, methods }) => {
 
-    // Set up prototype
-    Object.assign(proto, descriptor.methods);
-    Object.setPrototypeOf(obj, proto);
+  // If an instance is passed in, we need to mutate the instance,
+  // but we must not mutate the instance prototype, so we need to
+  // insert a new prototype into the prototype chain.
+  if (instance) {
+    const obj = instance;
+
+    // This is expensive, so only do it if it's needed.
+    if (Object.keys(methods).length) {
+      // Get the original prototype
+      const instanceProto = Object.getPrototypeOf(instance);
+
+      // Set prototype
+      const proto = Object.assign(Object.create(instanceProto), methods);
+      Object.setPrototypeOf(obj, proto);
+    }
+
+    return obj;
+
+  } else {
+    // set prototype
+    const obj = Object.create(methods);
+
+    return obj;
+  }
+};
+
+const createStamp = descriptor => {
+  return function Stamp (options = {}) {
+    const { instance } = options;
+    const methods = descriptor.methods;
+    const obj = createInstanceWithProto({ instance, methods });
 
     Object.assign(obj, descriptor.properties);
 
     descriptor.initializers.forEach(initializer => {
-      initializer.call(obj, { instance: obj });
+      initializer.call(obj, { instance: obj, stamp: Stamp, options });
     });
 
     return obj;

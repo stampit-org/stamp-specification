@@ -101,14 +101,3 @@ test('compose.configuration', (assert) => {
 
   assert.end();
 });
-
-
-// stamp instances
-/*
-'properties.a should exist'
-'properties.b should exist'
-'properties.overridden should exist'
-'staticProperties.a should exist'
-'staticProperties.b should exist'
-'staticProperties.overridden should exist'
-*/

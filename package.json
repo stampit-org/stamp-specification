@@ -6,11 +6,11 @@
   "scripts": {
     "lint": "eslint examples && eslint test",
     "test": "babel-node test/index.js",
-    "watch": "watch 'npm run lint && npm test' test/ examples/"
+    "watch": "watch 'clear && npm run -s lint && npm -s test' test/ examples/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://koresar@github.com/stampit-org/stamp-specification.git"
+    "url": "git@github.com:stampit-org/stamp-specification.git"
   },
   "keywords": [
     "stamp",
