@@ -5,6 +5,7 @@ const assignmentProps = [
   'methods',
   'properties',
   'staticProperties',
+  'deepStaticProperties',
   'propertyDescriptors',
   'staticPropertyDescriptors'
 ];
