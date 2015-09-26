@@ -2,7 +2,10 @@ import merge from 'lodash/object/merge';
 import map from 'lodash/collection/map';
 
 const getDescriptorProps = (descriptorName, composables) => {
-  return map(composables, 'compose.' + descriptorName);
+  return map(composables, composable => {
+    const descriptor = composable.compose || composable;
+    return descriptor[descriptorName];
+  });
 };
 
 const createInstanceWithProto = ({ instance, methods }) => {
