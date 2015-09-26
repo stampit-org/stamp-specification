@@ -13,7 +13,9 @@ const createInstanceWithProto = ({ instance, methods }) => {
   if (instance) {
     const obj = instance;
 
-    // This is expensive, so only do it if it's needed.
+    // Mutating an existing prototype chain has deep perf
+    // implications for all code that uses any instance,
+    // so only do this if it's needed.
     if (Object.keys(methods).length) {
       // Get the original prototype
       const instanceProto = Object.getPrototypeOf(instance);
