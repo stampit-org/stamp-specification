@@ -44,7 +44,7 @@ const createStamp = descriptor => {
     Object.assign(obj, descriptor.properties);
 
     descriptor.initializers.forEach(initializer => {
-      initializer.call(obj, { instance: obj, stamp: Stamp, options });
+      initializer.call(obj, options, { instance: obj, stamp: Stamp });
     });
 
     return obj;
