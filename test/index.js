@@ -16,49 +16,42 @@ test('compose function', assert => {
   assert.end();
 });
 
-test('compose.methods', assert => {
-  const actual = Boolean(compose().compose.methods);
-  const expected = true;
+test('compose() descriptor creation', assert => {
+  const descriptorPropNames = [
+    'methods',
+    'properties',
+    'deepProperties',
+    'staticProperties',
+    'deepStaticProperties',
+    'propertyDescriptors',
+    'staticPropertyDescriptors',
+    'configuration',
+    'initializers'
+  ];
 
-  assert.equal(actual, expected,
-    'should create compose.methods');
+  const stamp = compose();
 
-  assert.end();
-});
+  const actual = () => {
+    const obj = {};
+    descriptorPropNames.forEach(propName => {
+      obj[ propName + ' exists'] = Boolean(stamp.compose[propName]);
+    });
+    return obj;
+  }();
 
+  const expected = () => {
+    const obj = {};
+    descriptorPropNames.forEach(propName => {
+      obj[ propName + ' exists'] = true;
+    });
+    return obj;
+  }();
 
-test('compose.properties', assert => {
-  const actual = Boolean(compose().compose.properties);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.properties');
-
-  assert.end();
-});
-
-
-test('compose.deepProperties', assert => {
-  const actual = Boolean(compose().compose.deepProperties);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.deepProperties');
-
-  assert.end();
-});
-
-
-test('compose.initializers', assert => {
-  const actual = Boolean(compose().compose.initializers);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.initializers');
+  assert.deepEqual(actual, expected,
+    'All descriptor properties should be added to stamp descriptor');
 
   assert.end();
 });
-
 
 test('compose.staticProperties', nest => {
   ['staticProperties', 'deepStaticProperties'].forEach(descriptorName => {
@@ -113,37 +106,4 @@ test('compose.staticProperties', nest => {
     });
 
   });
-});
-
-
-test('compose.propertyDescriptors', assert => {
-  const actual = Boolean(compose().compose.propertyDescriptors);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.propertyDescriptors');
-
-  assert.end();
-});
-
-
-test('compose.staticPropertyDescriptors', assert => {
-  const actual = Boolean(compose().compose.staticPropertyDescriptors);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.staticPropertyDescriptors');
-
-  assert.end();
-});
-
-
-test('compose.configuration', assert => {
-  const actual = Boolean(compose().compose.configuration);
-  const expected = true;
-
-  assert.equal(actual, expected,
-    'should create compose.configuration');
-
-  assert.end();
 });
