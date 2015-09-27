@@ -60,14 +60,59 @@ test('compose.initializers', assert => {
 });
 
 
-test('compose.staticProperties', assert => {
-  const actual = Boolean(compose().compose.staticProperties);
-  const expected = true;
+test('compose.staticProperties', nest => {
+  ['staticProperties', 'deepStaticProperties'].forEach(descriptorName => {
 
-  assert.equal(actual, expected,
-    'should create compose.staticProperties');
+    nest.test('...for descriptor', assert => {
+      const actual = compose({
+        [ descriptorName ]: {
+          a: 'a'
+        }
+      }, {
+        [ descriptorName ]: {
+          b: 'b'
+        }
+      }).compose[ descriptorName ];
 
-  assert.end();
+      const expected = {
+        a: 'a',
+        b: 'b'
+      };
+
+      assert.deepEqual(actual, expected,
+        `should compose ${ descriptorName } into descriptor`);
+
+      assert.end();
+    });
+
+    nest.test('...for stamp', assert => {
+      const stamp = compose({
+        [ descriptorName ]: {
+          a: 'a'
+        }
+      }, {
+        [ descriptorName ]: {
+          b: 'b'
+        }
+      });
+
+      const actual = Object.assign({}, {
+        a: stamp.a,
+        b: stamp.b
+      });
+
+      const expected = {
+        a: 'a',
+        b: 'b'
+      };
+
+      assert.deepEqual(actual, expected,
+        `should add ${ descriptorName } to stamp`);
+
+      assert.end();
+    });
+
+  });
 });
 
 

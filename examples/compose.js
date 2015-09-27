@@ -84,6 +84,9 @@ function compose (...composables) {
   const stamp = createStamp(composeMethod);
 
   stamp.compose = composeMethod;
+  assign(stamp,
+    composeMethod.staticProperties,
+    composeMethod.deepStaticProperties);
 
   return stamp;
 }
