@@ -107,3 +107,32 @@ test('compose.staticProperties', nest => {
 
   });
 });
+
+test('compose collision warnings', nest => {
+  nest.test('...same stamp, different descriptor', assert => {
+    const config = compose({
+      configuration: {
+        warnOnCollision: true,
+        logger () {
+
+          assert.pass('Should warn on cross-descriptor collision');
+          assert.end();
+
+        }
+      }
+    });
+
+    compose(config, {
+      properties: {
+        a: 'a'
+      },
+      propertyDescriptors: {
+        a: {
+          value: 'b',
+          writable: false
+        }
+      }
+    })();
+
+  });
+});

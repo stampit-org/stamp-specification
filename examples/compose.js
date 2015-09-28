@@ -1,5 +1,6 @@
 import merge from 'lodash/object/merge';
 import map from 'lodash/collection/map';
+import warn from './warn-on-collision';
 
 const getDescriptorProps = (descriptorName, composables) => {
   return map(composables, composable => {
@@ -62,24 +63,30 @@ function compose (...composables) {
     return compose({ compose: composeMethod }, ...args);
   };
 
+  const configuration = merge({},
+    ...getDescriptorProps('configuration', composables));
+
   assign(composeMethod, {
     methods: assign({}, ...getDescriptorProps('methods', composables)),
-    properties: assign({}, ...getDescriptorProps('properties', composables)),
     deepProperties: merge({},
       ...getDescriptorProps('deepProperties', composables)),
-    initializers: [].concat(...getDescriptorProps('initializers', composables))
-      .filter(initializer => initializer !== undefined),
-    staticProperties: assign({},
-      ...getDescriptorProps('staticProperties', composables)),
+    properties: assign({}, ...getDescriptorProps('properties', composables)),
     deepStaticProperties: merge({},
       ...getDescriptorProps('deepStaticProperties', composables)),
+    staticProperties: assign({},
+      ...getDescriptorProps('staticProperties', composables)),
     propertyDescriptors: assign({},
       ...getDescriptorProps('propertyDescriptors', composables)),
     staticPropertyDescriptors: assign({},
       ...getDescriptorProps('staticPropertyDescriptors', composables)),
-    configuration: merge({},
-      ...getDescriptorProps('configuration', composables))
+    initializers: [].concat(...getDescriptorProps('initializers', composables))
+      .filter(initializer => initializer !== undefined),
+    configuration
   });
+
+  if (configuration.warnOnCollision) {
+    warn(configuration, composeMethod);
+  }
 
   const stamp = createStamp(composeMethod);
 
