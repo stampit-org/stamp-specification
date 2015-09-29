@@ -40,7 +40,7 @@ const createInstanceWithProto = ({ instance, methods }) => {
 };
 
 const createStamp = ({
-      methods, properties, propertyDescriptors, initializers,
+      methods, properties, deepProperties, propertyDescriptors, initializers,
       staticProperties, deepStaticProperties, staticPropertyDescriptors
     })=> {
 
@@ -50,7 +50,7 @@ const createStamp = ({
     const { instance } = options;
     const obj = createInstanceWithProto({ instance, methods });
 
-    assign(obj, properties);
+    assign(obj, deepProperties, properties);
 
     Object.defineProperties(obj, propertyDescriptors);
 
