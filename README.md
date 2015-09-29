@@ -119,7 +119,9 @@ const config = compose({
       }
     }
   }
-}, warnOnCollisions);
+});
+
+const myStamp = (config, warnOnCollisions);
 ```
 
 
