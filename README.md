@@ -103,6 +103,8 @@ It is possible for properties to collide, between both stamps, and between diffe
 
 Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For instance, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
 
+**Configuration Example**
+
 ```js
 import warnOnCollisions from 'collision-stamp';
 
@@ -121,7 +123,7 @@ const config = compose({
   }
 });
 
-const myStamp = (config, warnOnCollisions);
+const myStamp = compose(config, warnOnCollisions);
 ```
 
 
