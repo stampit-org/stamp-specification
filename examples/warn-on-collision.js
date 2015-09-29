@@ -1,4 +1,4 @@
-const warn = ({ logger = console.log.bind(console) }, descriptor) => {
+const warn = ({ logger = console.log }, descriptor) => {
   const instanceProps = {};
   const staticProps = {};
   const instanceKeys = [
@@ -27,9 +27,9 @@ const warn = ({ logger = console.log.bind(console) }, descriptor) => {
 
   staticKeys.forEach(staticKey => {
     for (let key in descriptor[staticKey]) {
-      if (instanceProps[key]) {
-        warnings.push(`Collision between ${ staticProps[key] }
-          and ${ staticKey }`);
+      if (staticProps[key]) {
+        warnings.push(
+          `Collision between ${ staticProps[key] } and ${ staticKey }`);
       } else {
         staticProps[key] = staticKey;
       }
