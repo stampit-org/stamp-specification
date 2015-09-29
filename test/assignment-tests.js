@@ -5,9 +5,7 @@ const assignmentProps = [
   'methods',
   'properties',
   'staticProperties',
-  'deepStaticProperties',
-  'propertyDescriptors',
-  'staticPropertyDescriptors'
+  'deepStaticProperties'
 ];
 
 const build = (num) => {

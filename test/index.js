@@ -5,3 +5,4 @@ import './merge-tests';
 import './initializer-tests';
 import './stamp-tests';
 import './collision-warning-tests';
+import './property-descriptor-tests';

@@ -39,20 +39,33 @@ const createInstanceWithProto = ({ instance, methods }) => {
   }
 };
 
-const createStamp = descriptor => {
-  return function Stamp (options = {}) {
+const createStamp = ({
+      methods, properties, propertyDescriptors, initializers,
+      staticProperties, deepStaticProperties, staticPropertyDescriptors
+    })=> {
+
+  const assign = Object.assign;
+
+  const Stamp = function Stamp (options = {}) {
     const { instance } = options;
-    const methods = descriptor.methods;
     const obj = createInstanceWithProto({ instance, methods });
 
-    Object.assign(obj, descriptor.properties);
+    assign(obj, properties);
 
-    descriptor.initializers.forEach(initializer => {
+    Object.defineProperties(obj, propertyDescriptors);
+
+    initializers.forEach(initializer => {
       initializer.call(obj, options, { instance: obj, stamp: Stamp });
     });
 
     return obj;
   };
+
+  assign(Stamp, deepStaticProperties, staticProperties);
+
+  Object.defineProperties(Stamp, staticPropertyDescriptors);
+
+  return Stamp;
 };
 
 
@@ -91,9 +104,6 @@ function compose (...composables) {
   const stamp = createStamp(composeMethod);
 
   stamp.compose = composeMethod;
-  assign(stamp,
-    composeMethod.staticProperties,
-    composeMethod.deepStaticProperties);
 
   return stamp;
 }

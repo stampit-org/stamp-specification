@@ -16,14 +16,16 @@ test('comopose function pojo (Plain Old JavaScript Object)', nest => {
     nest.test(`...with pojo descriptor.${ descriptorName }`, assert => {
       const descriptor = {
         [ descriptorName ]: {
-          a: 'a'
+          a: {
+            b: 'b'
+          }
         }
       };
 
       const actual = compose(descriptor).compose[ descriptorName ].a;
-      const expected = 'a';
+      const expected = { b: 'b' };
 
-      assert.equal(actual, expected,
+      assert.deepEqual(actual, expected,
         `should create ${ descriptorName } descriptor`);
 
       assert.end();
