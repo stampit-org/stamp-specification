@@ -95,43 +95,36 @@ It is possible for properties to collide, between both stamps, and between diffe
 
 **Different descriptor properties, one or more stamps:**
 
-* Optionally warn on collision at stamp creation time (set by configuration, off by default)
 * Instance properties have lowest priority
 * Shallow properties override deep properties
 * Descriptors override everything
 
 #### Configuration
 
-Stamp composition and instance creation behaviors can be manipulated by configuration stamps:
+Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For instance, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
+
+**Configuration Example**
 
 ```js
+import warnOnCollisions from 'collision-stamp';
+
 const config = compose({
   configuration: {
-    warnOnCollision: true,
-    logger (msg) {
-      const entry = {
-        date: Date.now(),
-        message: msg
-      };
-      console.log(JSON.stringify(entry));
+    collisions: {
+      warnOnCollision: true,
+      warn (msg) {
+        const entry = {
+          date: Date.now(),
+          message: msg
+        };
+        console.log(JSON.stringify(entry));
+      }
     }
   }
 });
+
+const myStamp = compose(config, warnOnCollisions);
 ```
-
-### Configuration Reserved Keys
-
-The following are reserved keys for the configuration descriptor property:
-
-```js
-{
-  warnOnCollision: boolean
-  logger: func
-}
-```
-
-* **warnOnCollision:** Log warnings about stamp property collisions during stamp creation time.
-* **logger:** A function that stamps can call to use the app logger. If a logger is specified, stamps should use it instead of `console.log()`.
 
 
 ### Stamp `options` Reserved Keys
