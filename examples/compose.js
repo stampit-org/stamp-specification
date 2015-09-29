@@ -1,6 +1,5 @@
 import merge from 'lodash/object/merge';
 import map from 'lodash/collection/map';
-import warn from './warn-on-collision';
 
 const getDescriptorProps = (descriptorName, composables) => {
   return map(composables, composable => {
@@ -96,10 +95,6 @@ function compose (...composables) {
       .filter(initializer => initializer !== undefined),
     configuration
   });
-
-  if (configuration.warnOnCollision) {
-    warn(configuration, composeMethod);
-  }
 
   const stamp = createStamp(composeMethod);
 
