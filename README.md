@@ -128,7 +128,7 @@ const myStamp = compose(config, warnOnCollisions);
 
 ### Stamp Options
 
-It is recommended that stamp factories only take one argument: The stamp `options` argument. There are no reserved properties and no special meaning. However, using multiple arguments for a stamp could create conflicts where multiple stamps expect the same argument to mean different things. Using named parameters, it's possible for stamp creator to resolve conflicts with `options` namespacing. For example, if you want to compose a database connection stamp with a message queue stamp:
+It is recommended that stamps only take one argument: The stamp `options` argument. There are no reserved properties and no special meaning. However, using multiple arguments for a stamp could create conflicts where multiple stamps expect the same argument to mean different things. Using named parameters, it's possible for stamp creator to resolve conflicts with `options` namespacing. For example, if you want to compose a database connection stamp with a message queue stamp:
 
 ```js
 const db = dbStamp({
