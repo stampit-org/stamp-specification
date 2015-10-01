@@ -11,17 +11,6 @@ const build = (prop, key, val = key) => {
   return { compose: composable };
 };
 
-const buildMethods = () => {
-  return {
-    compose: {
-      methods: {
-        a () { return 'a'; },
-        b () { return 'b'; }
-      }
-    }
-  };
-};
-
 test('compose()', assert => {
   const actual = typeof compose();
   const expected = 'function';
@@ -40,44 +29,6 @@ test('Stamp', nest => {
 
     assert.equal(actual, expected,
       'should produce an object instance');
-
-    assert.end();
-  });
-
-  nest.test('...with instance param', assert => {
-    const instance = {
-      a: 'a'
-    };
-
-    const actual = compose()({ instance });
-    const expected = instance;
-
-    assert.equal(actual, expected,
-      'should return instance arg');
-
-    assert.end();
-  });
-
-  nest.test('...with instance param && methods', assert => {
-    const proto = {
-      proto () {
-        return 'proto';
-      }
-    };
-
-    const instance = Object.assign(Object.create(proto), {
-      a: 'a'
-    });
-
-    const methodStamp = compose(buildMethods());
-    const obj = methodStamp({ instance });
-    const newProto = Object.getPrototypeOf(obj);
-
-    const actual = Object.getPrototypeOf(newProto);
-    const expected = proto;
-
-    assert.deepEqual(actual, expected,
-      'should not mutate existing prototype');
 
     assert.end();
   });

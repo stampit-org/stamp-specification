@@ -8,36 +8,6 @@ const getDescriptorProps = (descriptorName, composables) => {
   });
 };
 
-const createInstanceWithProto = ({ instance, methods }) => {
-
-  // If an instance is passed in, we need to mutate the instance,
-  // but we must not mutate the instance prototype, so we need to
-  // insert a new prototype into the prototype chain.
-  if (instance) {
-    const obj = instance;
-
-    // Mutating an existing prototype chain has deep perf
-    // implications for all code that uses any instance,
-    // so only do this if it's needed.
-    if (Object.keys(methods).length) {
-      // Get the original prototype
-      const instanceProto = Object.getPrototypeOf(instance);
-
-      // Set prototype
-      const proto = Object.assign(Object.create(instanceProto), methods);
-      Object.setPrototypeOf(obj, proto);
-    }
-
-    return obj;
-
-  } else {
-    // set prototype
-    const obj = Object.create(methods);
-
-    return obj;
-  }
-};
-
 const createStamp = ({
       methods, properties, deepProperties, propertyDescriptors, initializers,
       staticProperties, deepStaticProperties, staticPropertyDescriptors
@@ -46,8 +16,7 @@ const createStamp = ({
   const assign = Object.assign;
 
   const Stamp = function Stamp (options = {}) {
-    const { instance } = options;
-    const obj = createInstanceWithProto({ instance, methods });
+    let obj = Object.create(methods);
 
     assign(obj, deepProperties, properties);
 
