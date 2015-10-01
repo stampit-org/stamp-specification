@@ -52,7 +52,7 @@ Return a new stamp that encapsulates combined behavior. If nothing is passed in,
 
 ### Stamp
 
-* `stamp(options) => instance` **Creates or mutates object instances.** Take an options object which may contain an `.instance` property. Return the mutated instance. If no instance is passed, it uses a new empty object as the instance. If present, the existing prototype of the instance must not be mutated. Instead, the behavior (methods) must be added to a new delegate prototype.
+* `stamp(options) => instance` **Creates object instances.** Take an options object and return the resulting instance.
  * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
 
 
@@ -95,13 +95,12 @@ It is possible for properties to collide, between both stamps, and between diffe
 
 **Different descriptor properties, one or more stamps:**
 
-* Instance properties have lowest priority
 * Shallow properties override deep properties
 * Descriptors override everything
 
 #### Configuration
 
-Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For instance, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
+Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For example, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
 
 **Configuration Example**
 
@@ -127,27 +126,77 @@ const myStamp = compose(config, warnOnCollisions);
 ```
 
 
-### Stamp `options` Reserved Keys
+### Stamp Options
 
-The following are reserved keys for the stamp options object:
+It is recommended that stamp initializers only use one argument: The stamp `options` argument. There are no reserved properties and no special meaning. However, using multiple arguments for a stamp could create conflicts where multiple stamps expect the same argument to mean different things. Using named parameters, it's possible for stamp creator to resolve conflicts with `options` namespacing. For example, if you want to compose a database connection stamp with a message queue stamp:
 
 ```js
-{
-  instance // The object to be mutated by the stamp
-}
+const db = dbStamp({
+  host: 'localhost',
+  port: 3000,
+  onConnect() {
+    console.log('Database connection established.');
+  }
+});
+
+const queue = messageQueueStamp({
+  host: 'localhost',
+  port: 5000,
+  onComplete() {
+    console.log('Message queue connection established.');
+  }
+});
 ```
+
+If you tried to compose these directly, they would conflict with eachother, but it's easy to namespace the options at compose time:
+
+```js
+const DbQueue = compose({
+  initializers: [({db, queue}, { instance }) => {
+    instance.db = dbStamp({
+      host: db.host,
+      port: db.port,
+      onConnect: db.onConnect
+    });
+    instance.queue = messageQueueStamp({
+      host: queue.host,
+      port: queue.port,
+      onConnect: queue.onConnect
+    });
+  }]
+});
+
+myDBQueue = DbQueue({
+  db: {
+    host: 'localhost',
+    port: 3000,
+    onConnect () {
+      console.log('Database connection established.');
+    }
+  },
+  queue: {
+    host: 'localhost',
+    port: 5000,
+    onConnect () {
+      console.log('Message queue connection established.');
+    }
+  }
+});
+```
+
 
 ### Initializer Parameters
 
 Initializers have the following signature:
 
 ```js
-(options, { instance, stamp }) => instance
+(options, { instance, stamp, args }) => instance
 ```
 
 * `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
-* `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance.
+* `instance` The object instance being produced by the stamp. If the initializer returns a new object, it replaces the instance for subsequent initializer calls.
 * `stamp` A reference to the stamp producing the instance.
+* `args` An array of the arguments passed into the stamp, including the `options` argument.
 
 
 -----
