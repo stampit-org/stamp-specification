@@ -3,6 +3,7 @@ import compose from '../examples/compose';
 
 const mergeProps = [
   'deepProperties',
+  'deepStaticProperties',
   'configuration'
 ];
 
@@ -12,9 +13,11 @@ const build = (num) => {
 
   mergeProps.forEach(prop => {
     composable[prop] = {
-      [num]: num,
-      merge: {
-        [num]: num
+      a: {
+        [num]: num,
+        merge: {
+          [num]: num
+        }
       }
     };
   });
@@ -22,61 +25,70 @@ const build = (num) => {
   return { compose: composable };
 };
 
-// Loop over each property that is merged and ensure
-// that merge implemented correctly.
-mergeProps.forEach(prop => {
-  test(`${ prop } merge 1`, (assert) => {
-    const subject = compose(build(1), build(2));
-    const props = subject.compose;
+test('Deep property merge', nest => {
 
-    const actual = props[prop][1];
-    const expected = 1;
+  // Loop over each property that is merged and ensure
+  // that merge implemented correctly.
+  mergeProps.forEach(prop => {
 
-    assert.equal(actual, expected,
-      `${ prop } should be merged from first argument`);
+    nest.test(`...${ prop } merge 1`, (assert) => {
+      const subject = compose(build(1), build(2));
+      const props = subject.compose;
 
-    assert.end();
-  });
+      const actual = props[prop].a[1];
+      const expected = 1;
 
-  test(`${ prop } merge 2`, (assert) => {
-    const subject = compose(build(1), build(2));
-    const props = subject.compose;
+      assert.equal(actual, expected,
+        `${ prop } should be merged from first argument`);
 
-    const actual = props[prop][2];
-    const expected = 2;
+      assert.end();
+    });
 
-    assert.equal(actual, expected,
-      `${ prop } should be merged from 2nd argument`);
+    nest.test(`...${ prop } merge 2`, (assert) => {
+      const subject = compose(build(1), build(2));
+      const props = subject.compose;
 
-    assert.end();
-  });
+      const actual = props[prop].a[2];
+      const expected = 2;
 
-  test(`${ prop } merge 3`, (assert) => {
-    const subject = compose(build(1), build(2), build(3));
-    const props = subject.compose;
+      assert.equal(actual, expected,
+        `${ prop } should be merged from 2nd argument`);
 
-    const actual = props[prop][3];
-    const expected = 3;
+      assert.end();
+    });
 
-    assert.equal(actual, expected,
-      `${ prop } should be merged from subsequent arguments`);
+    nest.test(`...${ prop } merge 3`, (assert) => {
+      const subject = compose(build(1), build(2), build(3));
+      const props = subject.compose;
 
-    assert.end();
-  });
+      const actual = props[prop].a[3];
+      const expected = 3;
 
-  test(`${ prop } merge collision`, (assert) => {
-    const subject = compose( build(1), build(2) );
-    const props = subject.compose;
+      assert.equal(actual, expected,
+        `${ prop } should be merged from subsequent arguments`);
 
-    const actual = props[prop].merge;
-    const expected = {
-      [1]: 1,
-      [2]: 2
-    };
+      assert.end();
+    });
 
-    assert.deepEqual(actual, expected,
-      `${ prop } conflicts should be merged from colliding sources.`);
+    nest.test(`...${ prop } merge collision`, (assert) => {
+      const actual = compose(
+        {
+          deepProperties: {
+            a: { b: 1}
+          }
+        },
+        {
+          deepProperties: {
+            a: { b: 2 }
+          }
+        })();
+      const expected = { a: { b: 2 } };
 
-    assert.end();
+      assert.deepEqual(actual, expected,
+        `${ prop } conflicts should be merged with last-in priority.`);
+
+      assert.end();
+    });
+
   });
 });
