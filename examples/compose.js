@@ -23,7 +23,11 @@ const createStamp = ({
     Object.defineProperties(obj, propertyDescriptors);
 
     initializers.forEach(initializer => {
-      initializer.call(obj, options, { instance: obj, stamp: Stamp });
+      const returnValue = initializer.call(obj, options,
+        { instance: obj, stamp: Stamp });
+      if ( returnValue ) {
+        obj = returnValue;
+      }
     });
 
     return obj;
