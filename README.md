@@ -72,7 +72,7 @@ descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
-#### Composing descriptors
+#### Composing Descriptors
 
 Descriptors are composed together to create new descriptors with the following rules:
 
@@ -87,7 +87,47 @@ Descriptors are composed together to create new descriptors with the following r
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
 
 
-### Stamp `options` reserved keys
+#### Priority Rules
+
+It is possible for properties to collide, between both stamps, and between different properties of the same stamp. This is often expected behavior, so it must not throw.
+
+**Same descriptor property, different stamps:** Last in wins.
+
+**Different descriptor properties, one or more stamps:**
+
+* Instance properties have lowest priority
+* Shallow properties override deep properties
+* Descriptors override everything
+
+#### Configuration
+
+Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For instance, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
+
+**Configuration Example**
+
+```js
+import warnOnCollisions from 'collision-stamp';
+
+const config = compose({
+  configuration: {
+    collisions: {
+      warnOnCollision: true,
+      warn (msg) {
+        const entry = {
+          date: Date.now(),
+          message: msg
+        };
+        console.log(JSON.stringify(entry));
+      }
+    }
+  }
+});
+
+const myStamp = compose(config, warnOnCollisions);
+```
+
+
+### Stamp `options` Reserved Keys
 
 The following are reserved keys for the stamp options object:
 
@@ -97,7 +137,7 @@ The following are reserved keys for the stamp options object:
 }
 ```
 
-### Initializer parameters
+### Initializer Parameters
 
 Initializers have the following signature:
 
@@ -112,7 +152,7 @@ Initializers have the following signature:
 
 -----
 
-## Similarities with Promises (aka Thenables)
+## Similarities With Promises (aka Thenables)
 
 * *Thenable* ~ *Composable*.
 * `.then` ~ `.compose`.
