@@ -12,7 +12,7 @@ This is a draft proposal. The specification may have breaking changes. It should
 
 * [Reference Implementation](examples/compose.js)
 * [Stampit 3.0](https://github.com/stampit-org/stampit)
-* [react-stampit](https://github.com/stampit-org/react-stampit)
+* [react-stamp](https://github.com/troutowicz/react-stamp)
 
 ### Composable
 
