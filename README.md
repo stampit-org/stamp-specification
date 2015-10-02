@@ -10,7 +10,7 @@ Official announcement and hands on training scheduled @ [WebDirections in Sydney
 
 This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use. 3 implementations are coming:
 
-* Reference Implementation
+* [Reference Implementation](examples/compose.js)
 * [Stampit 3.0](https://github.com/stampit-org/stampit)
 * [react-stampit](https://github.com/stampit-org/react-stampit)
 
