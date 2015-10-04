@@ -11,43 +11,6 @@ test('compose function', assert => {
   assert.end();
 });
 
-test('compose() descriptor creation', assert => {
-  const descriptorPropNames = [
-    'methods',
-    'properties',
-    'deepProperties',
-    'staticProperties',
-    'deepStaticProperties',
-    'propertyDescriptors',
-    'staticPropertyDescriptors',
-    'configuration',
-    'initializers'
-  ];
-
-  const stamp = compose();
-
-  const actual = () => {
-    const obj = {};
-    descriptorPropNames.forEach(propName => {
-      obj[ propName + ' exists'] = Boolean(stamp.compose[propName]);
-    });
-    return obj;
-  }();
-
-  const expected = () => {
-    const obj = {};
-    descriptorPropNames.forEach(propName => {
-      obj[ propName + ' exists'] = true;
-    });
-    return obj;
-  }();
-
-  assert.deepEqual(actual, expected,
-    'All descriptor properties should be added to stamp descriptor');
-
-  assert.end();
-});
-
 test('compose.staticProperties', nest => {
   ['staticProperties', 'deepStaticProperties'].forEach(descriptorName => {
 
