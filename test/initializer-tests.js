@@ -4,39 +4,38 @@ import compose from '../examples/compose';
 
 const build = (num) => {
 
-  const composable = {
-    initializers: [() => {
-      return { num };
-    }]
-  };
+  const composable = function () {};
+  composable.compose = function () {};
+  composable.compose.initializers = [() => {
+    return {num};
+  }];
 
-  return { compose: composable };
+  return composable;
 };
 
 const buildInitializers = () => {
 
-  return {
-    compose: {
-      initializers: [
-        (args, { instance }) => {
-          return Object.assign(instance, {
-            a: 'a',
-            override: 'a'
-          });
-        },
-        (args, { instance }) => {
-          return Object.assign(instance, {
-            b: 'b'
-          });
-        },
-        (args, { instance }) => {
-          return Object.assign(instance, {
-            override: 'c'
-          });
-        }
-      ]
+  const composable = function () {};
+  composable.compose = function () {};
+  composable.compose.initializers = [
+    (args, { instance }) => {
+      return Object.assign(instance, {
+        a: 'a',
+        override: 'a'
+      });
+    },
+    (args, { instance }) => {
+      return Object.assign(instance, {
+        b: 'b'
+      });
+    },
+    (args, { instance }) => {
+      return Object.assign(instance, {
+        override: 'c'
+      });
     }
-  };
+  ];
+  return composable;
 };
 
 
@@ -85,37 +84,36 @@ test('compose()', nest => {
 test('stamp()', nest => {
 
   nest.test('...with initializers', assert => {
-    const testStamp = compose({
-      compose: {
-        properties: {
-          'instanceProps': true
-        },
-        initializers: [
-          function ({ stampOption }, { instance, stamp }) {
-            const actual = {
-              correctThisValue: this === instance,
-              hasOptions: Boolean(stampOption),
-              hasInstance: Boolean(instance.instanceProps),
-              hasStamp: Boolean(stamp.compose)
-            };
+    const composable = function(){};
+    composable.compose = function(){};
+    composable.compose.properties = {
+      'instanceProps': true
+    };
+    composable.compose.initializers = [
+      function ({ stampOption }, { instance, stamp }) {
+        const actual = {
+          correctThisValue: this === instance,
+          hasOptions: Boolean(stampOption),
+          hasInstance: Boolean(instance.instanceProps),
+          hasStamp: Boolean(stamp.compose)
+        };
 
-            const expected = {
-              correctThisValue: true,
-              hasOptions: true,
-              hasInstance: true,
-              hasStamp: true
-            };
+        const expected = {
+          correctThisValue: true,
+          hasOptions: true,
+          hasInstance: true,
+          hasStamp: true
+        };
 
-            assert.deepEqual(actual, expected,
-              'should call initializer with correct signature');
+        assert.deepEqual(actual, expected,
+          'should call initializer with correct signature');
 
-            assert.end();
-          }
-        ]
+        assert.end();
       }
-    });
+    ];
+    const testStamp = compose(composable);
 
-    testStamp({ stampOption: true });
+    testStamp({stampOption: true});
   });
 
   nest.test('...with initializers', assert => {
@@ -135,17 +133,16 @@ test('stamp()', nest => {
   });
 
   nest.test('...with `this` in initializer', assert => {
-    const stamp = compose({
-      compose: {
-        initializers: [
-          function () {
-            return Object.assign(this, {
-              a: 'a'
-            });
-          }
-        ]
+    const composable = function(){};
+    composable.compose = function(){};
+    composable.compose.initializers = [
+      function () {
+        return Object.assign(this, {
+          a: 'a'
+        });
       }
-    });
+    ];
+    const stamp = compose(composable);
 
     const actual = compose(stamp)();
     const expected = {

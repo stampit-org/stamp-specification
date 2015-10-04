@@ -10,16 +10,17 @@ const assignmentProps = [
 ];
 
 const build = (num) => {
-  const composable = {};
+  const composable = function(){};
+  composable.compose = function(){};
 
   assignmentProps.forEach(prop => {
-    composable[prop] = {
+    composable.compose[prop] = {
       [num]: num,
       override: num
     };
   });
 
-  return { compose: composable };
+  return composable;
 };
 
 // Loop over each property that is copied by assignment and ensure
