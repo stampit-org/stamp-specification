@@ -24,6 +24,27 @@ test('Instance replacement', assert => {
   })();
 });
 
+test('Instance not replaced', assert => {
+  const newInstance = undefined;
+
+  compose({
+    initializers: [
+      () => {
+        return newInstance;
+      },
+      (options, { instance }) => {
+        const actual = typeof instance;
+        const expected = 'object';
+
+        assert.equal(actual, expected,
+          'initializer returned falsy value should not replace instance');
+
+        assert.end();
+      }
+    ]
+  })();
+});
+
 test('Instance replacement', assert => {
   const message = 'instance replaced';
   const newInstance = {
