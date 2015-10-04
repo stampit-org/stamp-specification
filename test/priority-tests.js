@@ -76,19 +76,34 @@ test('compose override priorities', nest => {
   });
 
   nest.test('...with staticProperties', assert => {
-    const stamp = compose(buildDescriptor({
+    const stamp = compose({
       deepStaticProperties: {
         d: 'deep'
       },
       staticProperties: {
         d: 'staticProps'
       }
-    }));
+    });
     const actual = stamp.d;
     const expected = 'staticProps';
 
     assert.equal(actual, expected,
       'staticProperties should override deepStaticProperties');
+    assert.end();
+  });
+
+  nest.test('...with deepStaticProperties', assert => {
+    const deepInstance = { e: 'deep' };
+    const stamp = compose({
+      deepStaticProperties: {
+        d: deepInstance
+      }
+    });
+    const actual = stamp.d;
+    const notExpected = stamp.compose.deepStaticProperties.d;
+
+    assert.notEqual(actual, notExpected,
+      'deepStaticProperties should not be assigned from descriptor to stamp');
     assert.end();
   });
 });
