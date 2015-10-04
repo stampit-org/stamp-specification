@@ -9,10 +9,11 @@ const mergeProps = [
 
 
 const build = (num) => {
-  const composable = {};
+  const composable = function(){};
+  composable.compose = function(){};
 
   mergeProps.forEach(prop => {
-    composable[prop] = {
+    composable.compose[prop] = {
       a: {
         [num]: num,
         merge: {
@@ -22,7 +23,7 @@ const build = (num) => {
     };
   });
 
-  return { compose: composable };
+  return composable;
 };
 
 test('Deep property merge', nest => {
