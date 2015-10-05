@@ -18,18 +18,18 @@ const buildInitializers = () => {
   const composable = function () {};
   composable.compose = function () {};
   composable.compose.initializers = [
-    (args, { instance }) => {
+    (options, { instance }) => {
       return Object.assign(instance, {
         a: 'a',
         override: 'a'
       });
     },
-    (args, { instance }) => {
+    (options, { instance }) => {
       return Object.assign(instance, {
         b: 'b'
       });
     },
-    (args, { instance }) => {
+    (options, { instance }) => {
       return Object.assign(instance, {
         override: 'c'
       });
@@ -90,19 +90,21 @@ test('stamp()', nest => {
       'instanceProps': true
     };
     composable.compose.initializers = [
-      function ({ stampOption }, { instance, stamp }) {
+      function ({ stampOption }, { instance, stamp, args }) {
         const actual = {
           correctThisValue: this === instance,
           hasOptions: Boolean(stampOption),
           hasInstance: Boolean(instance.instanceProps),
-          hasStamp: Boolean(stamp.compose)
+          hasStamp: Boolean(stamp.compose),
+          argsLength: args.length === 3
         };
 
         const expected = {
           correctThisValue: true,
           hasOptions: true,
           hasInstance: true,
-          hasStamp: true
+          hasStamp: true,
+          argsLength: true
         };
 
         assert.deepEqual(actual, expected,
@@ -113,7 +115,7 @@ test('stamp()', nest => {
     ];
     const testStamp = compose(composable);
 
-    testStamp({stampOption: true});
+    testStamp({stampOption: true}, 1, 2);
   });
 
   nest.test('...with initializers', assert => {
