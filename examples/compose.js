@@ -18,7 +18,8 @@ const createStamp = ({
   const Stamp = function Stamp (...args) {
     let obj = Object.create(methods);
 
-    assign(obj, deepProperties, properties);
+    merge(obj, deepProperties);
+    assign(obj, properties);
 
     Object.defineProperties(obj, propertyDescriptors);
 
@@ -34,7 +35,8 @@ const createStamp = ({
     return obj;
   };
 
-  assign(Stamp, deepStaticProperties, staticProperties);
+  merge(Stamp, deepStaticProperties);
+  assign(Stamp, staticProperties);
 
   Object.defineProperties(Stamp, staticPropertyDescriptors);
 
