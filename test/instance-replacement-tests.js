@@ -24,25 +24,25 @@ test('Instance replacement', assert => {
   })();
 });
 
-test('Instance not replaced', assert => {
-  const newInstance = undefined;
+[0, 1, undefined, null, NaN, "string", true, false].forEach(obj => {
+  test('Instance not replaced with ' + obj, assert => {
+    compose({
+      initializers: [
+        () => {
+          return obj;
+        },
+        (options, { instance }) => {
+          const actual = typeof instance;
+          const expected = 'object';
 
-  compose({
-    initializers: [
-      () => {
-        return newInstance;
-      },
-      (options, { instance }) => {
-        const actual = typeof instance;
-        const expected = 'object';
+          assert.equal(actual, expected,
+            'initializer returned non object value should not replace instance');
 
-        assert.equal(actual, expected,
-          'initializer returned falsy value should not replace instance');
-
-        assert.end();
-      }
-    ]
-  })();
+          assert.end();
+        }
+      ]
+    })();
+  });
 });
 
 test('Instance replacement', assert => {
