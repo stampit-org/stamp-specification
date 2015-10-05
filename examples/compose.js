@@ -15,16 +15,17 @@ const createStamp = ({
 
   const assign = Object.assign;
 
-  const Stamp = function Stamp (options = {}) {
+  const Stamp = function Stamp (...args) {
     let obj = Object.create(methods);
 
     assign(obj, deepProperties, properties);
 
     Object.defineProperties(obj, propertyDescriptors);
 
+    const options = args[0];
     initializers.forEach(initializer => {
       const returnValue = initializer.call(obj, options,
-        { instance: obj, stamp: Stamp });
+        { instance: obj, stamp: Stamp, args });
       if ( returnValue ) {
         obj = returnValue;
       }
