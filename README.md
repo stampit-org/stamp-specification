@@ -14,23 +14,33 @@ This is a draft proposal. The specification may have breaking changes. It should
 * [Stampit 3.0](https://github.com/stampit-org/stampit)
 * [react-stamp](https://github.com/troutowicz/react-stamp)
 
-### Composable
+### Reading Function Signatures
 
-**Composable** (aka **stamp**) is a composable factory function that returns object instances based on its **descriptor**.
+This document uses the [Rtype specification](https://github.com/ericelliott/rtype#rtype) for function signatures:
 
 ```js
-assert(typeof composable === 'function');
+(param: type): returnType
+```
 
+### Composable
+
+A **composable** is a composable factory function (aka **stamp**) that returns object instances based on its **descriptor**. Composables may also be POJO (Plain Old JavaScript Object) descriptors, instead of factories.
+
+```js
+composable(options?: object, ...args?: any): instance: object
+```
+
+```js
 const newObject = composable();
 ```
 
-It has method called `.compose()`:
+Stamps have a method called `.compose()`:
 
 ```js
-assert(typeof composable.compose === 'function');
+stamp.compose(...args?: stamp || descriptor): stamp
 ```
 
-When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* (or *descriptors*) passed as arguments:
+When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* or *descriptors* passed as arguments:
 
 ```js
 const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
@@ -38,25 +48,54 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 
 ### Descriptor
 
-**Composable descriptor** (or just **Descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the `.compose()` method, e.g. `.compose.methods`
+**Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
 
 
 
 ### Standalone `compose()` function (optional)
 
-* `compose(...stampsOrDescriptors) => stamp` **Creates stamps.** Take any number of stamps or descriptors.
-Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
+```js
+(...args?: stamp || descriptor): stamp
+```
+
+**Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
 
 
 ## Implementation details
 
 ### Stamp
 
-* `stamp(options) => instance` **Creates object instances.** Take an options object and return the resulting instance.
- * `.compose(...stampsOrDescriptors) => stamp` **Creates stamps.** A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
+```js
+stamp(options?: object, ...args?: any): instance: object
+```
+
+**Creates object instances.** Take an options object and return the resulting instance.
+
+
+```js
+stamp.compose(...args?: stamp || descriptor): stamp
+```
+
+**Creates stamps.**
+
+A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
 
 
 ### The Stamp Descriptor
+
+```js
+interface descriptor {
+  methods?: object,
+  properties?: object,
+  deepProperties?: object,
+  propertyDescriptors?: object,
+  staticProperties?: object,
+  deepStaticProperties?: object,
+  staticPropertyDescriptors?: object,
+  initializers?: array,
+  configuration?: object
+}
+```
 
 The names and definitions of the fixed properties that form the stamp descriptor.
 The stamp descriptor properties are made available on each stamp as `stamp.compose.*`
@@ -64,12 +103,12 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 * `methods` - A set of methods that will be added to the object's delegate prototype.
 * `properties` - A set of properties that will be added to new object instances by assignment.
 * `deepProperties` - A set of properties that will be added to new object instances by assignment with deep property merge.
-* `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
-* `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
-* `deepStaticProperties` - A set of static properties that will be added to the stamp by assignment with deep property merge.
 * `propertyDescriptors` - A set of [object property
 descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
+* `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
+* `deepStaticProperties` - A set of static properties that will be added to the stamp by assignment with deep property merge.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
+* `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
 
 #### Composing Descriptors
@@ -79,11 +118,11 @@ Descriptors are composed together to create new descriptors with the following r
 * `methods` are copied by assignment: `descriptor.methods = _.assign({}, descriptor1.methods, descriptor2.methods)`
 * `properties` are copied by assignment: `descriptor.properties = _.assign({}, descriptor1.properties, descriptor2.properties)`
 * `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
-* `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
+* `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
 * `deepStaticProperties` are deep merged: `descriptor.deepStaticProperties = _.merge({}, descriptor1.deepStaticProperties, descriptor2.deepStaticProperties)`
-* `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
+* `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
 
 
@@ -190,7 +229,7 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options, { instance, stamp, args }) => instance
+(options: object, { instance: object, stamp: stamp, args: array }): instance: object
 ```
 
 * `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
