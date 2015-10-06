@@ -76,14 +76,14 @@ test('compose override priorities', nest => {
   });
 
   nest.test('...with staticProperties', assert => {
-    const stamp = compose(buildDescriptor({
+    const stamp = compose({
       deepStaticProperties: {
         d: 'deep'
       },
       staticProperties: {
         d: 'staticProps'
       }
-    }));
+    });
     const actual = stamp.d;
     const expected = 'staticProps';
 

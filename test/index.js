@@ -7,3 +7,4 @@ import './priority-tests';
 import './property-descriptor-tests';
 import './stamp-tests';
 import './instance-replacement-tests';
+import './property-safety-tests.js';
