@@ -81,7 +81,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
 * `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
 * `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
-* `deepStaticProperties` are deep merged: descriptor.deepStaticProperties = _.merge({}, descriptor1.deepStaticProperties, descriptor2.deepStaticProperties)`
+* `deepStaticProperties` are deep merged: `descriptor.deepStaticProperties = _.merge({}, descriptor1.deepStaticProperties, descriptor2.deepStaticProperties)`
 * `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
 * `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
@@ -193,7 +193,7 @@ Initializers have the following signature:
 (options, { instance, stamp, args }) => instance
 ```
 
-* `options` The `options` argument passed into the stamp, containing propreties that may be used by initializers.
+* `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
 * `instance` The object instance being produced by the stamp. If the initializer returns a different object, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
 * `args` An array of the arguments passed into the stamp, including the `options` argument.
