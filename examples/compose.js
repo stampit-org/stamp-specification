@@ -15,7 +15,7 @@ const createStamp = ({
 
   const assign = Object.assign;
 
-  const Stamp = function Stamp (options = {}) {
+  const Stamp = function Stamp (options, ...args) {
     let obj = Object.create(methods);
 
     assign(obj, deepProperties, properties);
@@ -24,7 +24,7 @@ const createStamp = ({
 
     initializers.forEach(initializer => {
       const returnValue = initializer.call(obj, options,
-        { instance: obj, stamp: Stamp });
+        { instance: obj, stamp: Stamp, args: [options].concat(args) });
       if ( returnValue ) {
         obj = returnValue;
       }

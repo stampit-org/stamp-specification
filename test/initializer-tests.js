@@ -118,7 +118,7 @@ test('stamp()', nest => {
     testStamp({stampOption: true}, 1, 2);
   });
 
-  nest.test('...with initializers', assert => {
+  nest.test('...with overrides in initializer', assert => {
     const stamp = buildInitializers();
 
     const actual = compose(stamp)();
@@ -132,6 +132,24 @@ test('stamp()', nest => {
       'should apply initializers with last-in priority');
 
     assert.end();
+  });
+
+  nest.test('...with args in initializer', assert => {
+    const expected = [0, "string", { obj: {} }, [1, 2, 3]];
+
+    const composable = function(){};
+    composable.compose = function(){};
+    composable.compose.initializers = [
+      function (options, { args }) {
+        assert.deepEqual(args, expected,
+          'should receive all given arguments');
+
+        assert.end();
+      }
+    ];
+    const testStamp = compose(composable);
+
+    testStamp(expected[0], expected[1], expected[2], expected[3]);
   });
 
   nest.test('...with `this` in initializer', assert => {
