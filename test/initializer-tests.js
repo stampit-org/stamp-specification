@@ -84,8 +84,8 @@ test('compose()', nest => {
 test('stamp()', nest => {
 
   nest.test('...with initializers', assert => {
-    const composable = function(){};
-    composable.compose = function(){};
+    const composable = function () {};
+    composable.compose = function () {};
     composable.compose.properties = {
       'instanceProps': true
     };
@@ -135,10 +135,10 @@ test('stamp()', nest => {
   });
 
   nest.test('...with args in initializer', assert => {
-    const expected = [0, "string", { obj: {} }, [1, 2, 3]];
+    const expected = [0, 'string', { obj: {} }, [1, 2, 3]];
 
-    const composable = function(){};
-    composable.compose = function(){};
+    const composable = function () {};
+    composable.compose = function () {};
     composable.compose.initializers = [
       function (options, { args }) {
         assert.deepEqual(args, expected,
@@ -153,8 +153,8 @@ test('stamp()', nest => {
   });
 
   nest.test('...with `this` in initializer', assert => {
-    const composable = function(){};
-    composable.compose = function(){};
+    const composable = function () {};
+    composable.compose = function () {};
     composable.compose.initializers = [
       function () {
         return Object.assign(this, {

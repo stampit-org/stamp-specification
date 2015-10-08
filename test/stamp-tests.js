@@ -2,8 +2,8 @@ import test from 'tape';
 import compose from '../examples/compose';
 
 const build = (prop, key, val = key) => {
-  const composable = function(){};
-  composable.compose = function(){};
+  const composable = function () {};
+  composable.compose = function () {};
 
   composable.compose[prop] = {
     [val]: val
@@ -37,8 +37,8 @@ test('Stamp', nest => {
 
 test('Stamp assignments', nest => {
   nest.test('...with properties', assert => {
-    const composable = function(){};
-    composable.compose = function(){};
+    const composable = function () {};
+    composable.compose = function () {};
     composable.compose.properties = {
       a: 'a',
       b: 'b'
