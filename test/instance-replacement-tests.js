@@ -24,7 +24,7 @@ test('Instance replacement', assert => {
   })();
 });
 
-[0, 1, undefined, null, NaN, "string", true, false].forEach(obj => {
+[0, 1, undefined, null, NaN, 'string', true, false].forEach(obj => {
   test('Instance not replaced with ' + obj, assert => {
     compose({
       initializers: [

@@ -9,8 +9,8 @@ const mergeProps = [
 
 
 const build = (num) => {
-  const composable = function(){};
-  composable.compose = function(){};
+  const composable = function () {};
+  composable.compose = function () {};
 
   mergeProps.forEach(prop => {
     composable.compose[prop] = {

@@ -10,8 +10,8 @@ const assignmentProps = [
 ];
 
 const build = (num) => {
-  const composable = function(){};
-  composable.compose = function(){};
+  const composable = function () {};
+  composable.compose = function () {};
 
   assignmentProps.forEach(prop => {
     composable.compose[prop] = {
