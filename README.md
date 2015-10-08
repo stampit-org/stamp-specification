@@ -37,7 +37,7 @@ const newObject = composable();
 Stamps have a method called `.compose()`:
 
 ```js
-stamp.compose(...args?: stamp || descriptor): stamp
+stamp.compose(...args?: stamp|descriptor): stamp
 ```
 
 When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* or *descriptors* passed as arguments:
@@ -55,7 +55,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 ### Standalone `compose()` function (optional)
 
 ```js
-(...args?: stamp || descriptor): stamp
+(...args?: stamp|descriptor): stamp
 ```
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
@@ -73,7 +73,7 @@ stamp(options?: object, ...args?: any): instance: object
 
 
 ```js
-stamp.compose(...args?: stamp || descriptor): stamp
+stamp.compose(...args?: stamp|descriptor): stamp
 ```
 
 **Creates stamps.**
