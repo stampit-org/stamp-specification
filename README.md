@@ -27,7 +27,7 @@ This document uses the [Rtype specification](https://github.com/ericelliott/rtyp
 A **composable** is a composable factory function (aka **stamp**) that returns object instances based on its **descriptor**. Composables may also be POJO (Plain Old JavaScript Object) descriptors, instead of factories.
 
 ```js
-composable(options?: object, ...args?: any): instance: object
+composable(options?: object, ...args?: any[]): instance: object
 ```
 
 ```js
@@ -37,7 +37,7 @@ const newObject = composable();
 Stamps have a method called `.compose()`:
 
 ```js
-stamp.compose(...args?: stamp|descriptor): stamp
+stamp.compose(...args?: stamp|descriptor[]): stamp
 ```
 
 When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* or *descriptors* passed as arguments:
@@ -55,7 +55,7 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 ### Standalone `compose()` function (optional)
 
 ```js
-(...args?: stamp|descriptor): stamp
+(...args?: stamp|descriptor[]): stamp
 ```
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
@@ -66,14 +66,14 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 ### Stamp
 
 ```js
-stamp(options?: object, ...args?: any): instance: object
+stamp(options?: object, ...args?: any[]): instance: object
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
 
 
 ```js
-stamp.compose(...args?: stamp|descriptor): stamp
+stamp.compose(...args?: stamp|descriptor[]): stamp
 ```
 
 **Creates stamps.**
