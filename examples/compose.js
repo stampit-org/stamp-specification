@@ -1,6 +1,6 @@
 import merge from 'lodash/object/merge';
 import map from 'lodash/collection/map';
-import isObject from 'lodash/lang/isObject';
+import isUndefined from 'lodash/lang/isUndefined';
 
 const getDescriptorProps = (descriptorName, composables) => {
   return map(composables, composable => {
@@ -27,7 +27,7 @@ const createStamp = ({
     initializers.forEach(initializer => {
       const returnValue = initializer.call(obj, options,
         { instance: obj, stamp: Stamp, args: [options].concat(args) });
-      if ( isObject(returnValue) ) {
+      if ( !isUndefined(returnValue) ) {
         obj = returnValue;
       }
     });
