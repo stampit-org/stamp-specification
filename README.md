@@ -233,7 +233,7 @@ Initializers have the following signature:
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
-* `instance` The object instance being produced by the stamp. If the initializer returns a different object, it replaces the instance.
+* `instance` The object instance being produced by the stamp. If the initializer returns a value other than `undefined`, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
 * `args` An array of the arguments passed into the stamp, including the `options` argument.
 
