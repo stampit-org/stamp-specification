@@ -8,9 +8,10 @@ The composables specification exists in order to define a standard format for co
 
 Official announcement and hands on training scheduled @ [WebDirections in Sydney, Australia Oct 27th](http://www.webdirections.org/wd15/#workshops).
 
-This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use. 3 implementations are coming:
+This is a draft proposal. The specification may have breaking changes. It should not be considered ready for production use. Implementations:
 
 * [Reference Implementation](examples/compose.js)
+* [Stamp Utils](https://github.com/stampit-org/stamp-utils)
 * [Stampit 3.0](https://github.com/stampit-org/stampit)
 * [react-stamp](https://github.com/troutowicz/react-stamp)
 
