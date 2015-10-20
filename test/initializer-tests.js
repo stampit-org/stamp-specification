@@ -41,6 +41,19 @@ const buildInitializers = () => {
 
 test('compose()', nest => {
 
+  nest.test(`...with no initializers`, assert => {
+    const subject = compose({ initializers: [ 0, 'a', null, undefined, {}, NaN, /regexp/ ]});
+    const initializers = subject.compose.initializers;
+
+    const actual = initializers.length;
+    const expected = 1;
+
+    assert.equal(actual, expected,
+      'should not add any initializers');
+
+    assert.end();
+  });
+
   nest.test(`...with two initializers`, assert => {
     const subject = compose(build(1), build(2));
     const initializers = subject.compose.initializers;
