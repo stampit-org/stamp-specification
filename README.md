@@ -189,7 +189,7 @@ const queue = messageQueueStamp({
 });
 ```
 
-If you tried to compose these directly, they would conflict with eachother, but it's easy to namespace the options at compose time:
+If you tried to compose these directly, they would conflict with each other, but it's easy to namespace the options at compose time:
 
 ```js
 const DbQueue = compose({
