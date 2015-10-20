@@ -1,6 +1,7 @@
 import merge from 'lodash/object/merge';
 import map from 'lodash/collection/map';
 import isUndefined from 'lodash/lang/isUndefined';
+import isFunction from 'lodash/lang/isFunction';
 
 const getDescriptorProps = (descriptorName, composables) => {
   return map(composables, composable => {
@@ -68,7 +69,7 @@ function compose (...composables) {
     staticPropertyDescriptors: assign({},
       ...getDescriptorProps('staticPropertyDescriptors', composables)),
     initializers: [].concat(...getDescriptorProps('initializers', composables))
-      .filter(initializer => initializer !== undefined),
+      .filter(initializer => isFunction(initializer)),
     configuration
   });
 
