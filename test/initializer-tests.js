@@ -45,10 +45,7 @@ test('compose()', nest => {
     const subject = compose({ initializers: [ 0, 'a', null, undefined, {}, NaN, /regexp/ ]});
     const initializers = subject.compose.initializers;
 
-    const actual = initializers.length;
-    const expected = 0;
-
-    assert.equal(actual, expected,
+    assert.notOk(initializers && initializers.length,
       'should not add any initializers');
 
     assert.end();
