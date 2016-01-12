@@ -85,7 +85,7 @@ stamp(options?: object, ...args?: any[]): instance: object
 
 
 ```js
-stamp.compose(...args?: stamp[]|descriptor[]): stamp
+stamp.compose(...args?: stamp|descriptor[]): stamp
 ```
 
 **Creates stamps.**
