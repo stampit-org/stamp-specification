@@ -36,7 +36,7 @@ A **composable** is one of:
 
 ### Stamp
 
-A **stamp** is a composable factory function (aka stamp) that returns object instances based on its **descriptor**.
+A **stamp** is a composable factory function that returns object instances based on its **descriptor**.
 
 
 ```js
