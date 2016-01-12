@@ -24,7 +24,10 @@ This document uses the [Rtype specification](https://github.com/ericelliott/rtyp
 
 ### Composable
 
-A **composable** is a composable factory function (aka **stamp**) that returns object instances based on its **descriptor**. Composables may also be POJO (Plain Old JavaScript Object) descriptors, instead of factories.
+A **composable** is one of:
+
+* A composable factory function (aka **stamp**) that returns object instances based on its **descriptor**.
+* A POJO (Plain Old JavaScript Object) stamp descriptor.
 
 ```js
 composable(options?: object, ...args?: any[]): instance: object
