@@ -55,9 +55,12 @@ When called the `.compose()` method creates new stamp using the current stamp as
 const combinedStamp = baseStamp.compose(composable1, composable2, composable3);
 ```
 
+The `.compose()` method doubles as the stamp's descriptor. In other words, descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
+
+
 ### Descriptor
 
-**Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
+**Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance.
 
 
 
