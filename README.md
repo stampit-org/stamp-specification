@@ -19,43 +19,59 @@ The specification is currently used by the following officially supported implem
 This document uses the [Rtype specification](https://github.com/ericelliott/rtype#rtype) for function signatures:
 
 ```js
-(param: type): returnType
+(param: Type): ReturnType
 ```
 
 ### Composable
 
-A **composable** is a composable factory function (aka **stamp**) that returns object instances based on its **descriptor**. Composables may also be POJO (Plain Old JavaScript Object) descriptors, instead of factories.
+```js
+interface Composable: Stamp|Descriptor
+```
+
+A **composable** is one of:
+
+* A stamp.
+* A POJO (Plain Old JavaScript Object) stamp descriptor.
+
+
+### Stamp
+
+A **stamp** is a composable factory function that returns object instances based on its **descriptor**.
+
 
 ```js
-composable(options?: object, ...args?: any[]): instance: object
+stamp(options?: Object, ...args?: Any[]): instance: object
 ```
 
 ```js
-const newObject = composable();
+const newObject = stamp();
 ```
 
 Stamps have a method called `.compose()`:
 
 ```js
-stamp.compose(...args?: stamp|descriptor[]): stamp
+Stamp.compose(...args?: Composable[]): Stamp
 ```
 
-When called the `.compose()` method creates new composable using the current composable as a base, composed with a list of *composables* or *descriptors* passed as arguments:
+When called the `.compose()` method creates new stamp using the current stamp as a base, composed with a list of *composables* passed as arguments:
 
 ```js
-const combinedComposable = baseComposable.compose(composable1, composable2, composable3);
+const combinedStamp = baseStamp.compose(composable1, composable2, composable3);
 ```
+
+The `.compose()` method doubles as the stamp's descriptor. In other words, descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
+
 
 ### Descriptor
 
-**Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance. Descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
+**Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance.
 
 
 
 ### Standalone `compose()` function (optional)
 
 ```js
-(...args?: stamp|descriptor[]): stamp
+(...args?: Composable[]): Stamp
 ```
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
@@ -66,14 +82,14 @@ const combinedComposable = baseComposable.compose(composable1, composable2, comp
 ### Stamp
 
 ```js
-stamp(options?: object, ...args?: any[]): instance: object
+Stamp(options?: Object, ...args?: Any[]): Instance: Object
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
 
 
 ```js
-stamp.compose(...args?: stamp|descriptor[]): stamp
+Stamp.compose(...args?: Composable[]): Stamp
 ```
 
 **Creates stamps.**
@@ -84,16 +100,16 @@ A method exposed by all composables, identical to `compose()`, except it prepend
 ### The Stamp Descriptor
 
 ```js
-interface descriptor {
-  methods?: object,
-  properties?: object,
-  deepProperties?: object,
-  propertyDescriptors?: object,
-  staticProperties?: object,
-  deepStaticProperties?: object,
-  staticPropertyDescriptors?: object,
-  initializers?: array,
-  configuration?: object
+interface Descriptor {
+  methods?: Object,
+  properties?: Object,
+  deepProperties?: Object,
+  propertyDescriptors?: Object,
+  staticProperties?: Object,
+  deepStaticProperties?: Object,
+  staticPropertyDescriptors?: Object,
+  initializers?: Array,
+  configuration?: Object
 }
 ```
 
@@ -229,7 +245,7 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options: object, { instance: object, stamp: stamp, args: array }): instance: object
+(options: Object, { instance: Object, stamp: Stamp, args: Array }): instance: Object
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
