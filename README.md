@@ -19,7 +19,7 @@ The specification is currently used by the following officially supported implem
 This document uses the [Rtype specification](https://github.com/ericelliott/rtype#rtype) for function signatures:
 
 ```js
-(param: Type): ReturnType
+(param: Type) => ReturnType
 ```
 
 ### Composable
@@ -40,7 +40,7 @@ A **stamp** is a composable factory function that returns object instances based
 
 
 ```js
-stamp(options?: Object, ...args?: Any[]): instance: object
+stamp(options?: Object, ...args?: Any[]) => instance: object
 ```
 
 ```js
@@ -50,7 +50,7 @@ const newObject = stamp();
 Stamps have a method called `.compose()`:
 
 ```js
-Stamp.compose(...args?: Composable[]): Stamp
+Stamp.compose(...args?: Composable[]) => Stamp
 ```
 
 When called the `.compose()` method creates new stamp using the current stamp as a base, composed with a list of *composables* passed as arguments:
@@ -71,7 +71,7 @@ The `.compose()` method doubles as the stamp's descriptor. In other words, descr
 ### Standalone `compose()` function (optional)
 
 ```js
-(...args?: Composable[]): Stamp
+(...args?: Composable[]) => Stamp
 ```
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
@@ -82,14 +82,14 @@ The `.compose()` method doubles as the stamp's descriptor. In other words, descr
 ### Stamp
 
 ```js
-Stamp(options?: Object, ...args?: Any[]): Instance: Object
+Stamp(options?: Object, ...args?: Any[]) => Instance: Object
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
 
 
 ```js
-Stamp.compose(...args?: Composable[]): Stamp
+Stamp.compose(...args?: Composable[]) => Stamp
 ```
 
 **Creates stamps.**
@@ -245,7 +245,7 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options: Object, { instance: Object, stamp: Stamp, args: Array }): instance: Object
+(options: Object, { instance: Object, stamp: Stamp, args: Array }) => instance: Object
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
