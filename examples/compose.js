@@ -1,23 +1,21 @@
-import merge from 'lodash/object/merge';
-import map from 'lodash/collection/map';
-import isUndefined from 'lodash/lang/isUndefined';
-import isFunction from 'lodash/lang/isFunction';
+import merge from 'lodash/merge';
+const isFunction = (obj) => typeof obj === 'function';
+const assign = Object.assign;
 
 const getDescriptorProps = (descriptorName, composables) => {
-  return map(composables, composable => {
+  return !composables ? undefined : composables.map(composable => {
     const descriptor = composable.compose || composable;
     return descriptor[descriptorName];
   });
 };
 
-const createStamp = ({
-      methods, properties, deepProperties, propertyDescriptors, initializers,
-      staticProperties, deepStaticProperties, staticPropertyDescriptors
-    })=> {
+const createStamp = (composeMethod) => {
+  const {
+    methods, properties, deepProperties, propertyDescriptors, initializers,
+    staticProperties, deepStaticProperties, staticPropertyDescriptors
+  } = composeMethod;
 
-  const assign = Object.assign;
-
-  const Stamp = function Stamp (options, ...args) {
+  const Stamp = function Stamp(options, ...args) {
     let obj = Object.create(methods);
 
     merge(obj, deepProperties);
@@ -28,7 +26,7 @@ const createStamp = ({
     initializers.forEach(initializer => {
       const returnValue = initializer.call(obj, options,
         { instance: obj, stamp: Stamp, args: [options].concat(args) });
-      if ( !isUndefined(returnValue) ) {
+      if (returnValue !== undefined) {
         obj = returnValue;
       }
     });
@@ -38,22 +36,17 @@ const createStamp = ({
 
   merge(Stamp, deepStaticProperties);
   assign(Stamp, staticProperties);
-
   Object.defineProperties(Stamp, staticPropertyDescriptors);
+  Stamp.compose = composeMethod;
 
   return Stamp;
 };
 
 
 function compose (...composables) {
-  const assign = Object.assign;
-
   const composeMethod = function (...args) {
-    return compose({ compose: composeMethod }, ...args);
+    return compose(composeMethod, ...args);
   };
-
-  const configuration = merge({},
-    ...getDescriptorProps('configuration', composables));
 
   assign(composeMethod, {
     methods: assign({}, ...getDescriptorProps('methods', composables)),
@@ -69,15 +62,11 @@ function compose (...composables) {
     staticPropertyDescriptors: assign({},
       ...getDescriptorProps('staticPropertyDescriptors', composables)),
     initializers: [].concat(...getDescriptorProps('initializers', composables))
-      .filter(initializer => isFunction(initializer)),
-    configuration
+      .filter(isFunction),
+    configuration: merge({}, ...getDescriptorProps('configuration', composables))
   });
 
-  const stamp = createStamp(composeMethod);
-
-  stamp.compose = composeMethod;
-
-  return stamp;
+  return createStamp(composeMethod);
 }
 
 export default compose;
