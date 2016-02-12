@@ -62,7 +62,7 @@ function compose (...composables) {
     staticPropertyDescriptors: assign({},
       ...getDescriptorProps('staticPropertyDescriptors', composables)),
     initializers: [].concat(...getDescriptorProps('initializers', composables))
-      .filter(initializer => isFunction(initializer)),
+      .filter(isFunction),
     configuration: merge({}, ...getDescriptorProps('configuration', composables))
   });
 
