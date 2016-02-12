@@ -48,9 +48,6 @@ function compose (...composables) {
     return compose(composeMethod, ...args);
   };
 
-  const configuration = merge({},
-    ...getDescriptorProps('configuration', composables));
-
   assign(composeMethod, {
     methods: assign({}, ...getDescriptorProps('methods', composables)),
     deepProperties: merge({},
@@ -66,7 +63,7 @@ function compose (...composables) {
       ...getDescriptorProps('staticPropertyDescriptors', composables)),
     initializers: [].concat(...getDescriptorProps('initializers', composables))
       .filter(initializer => isFunction(initializer)),
-    configuration
+    configuration: merge({}, ...getDescriptorProps('configuration', composables))
   });
 
   return createStamp(composeMethod);
