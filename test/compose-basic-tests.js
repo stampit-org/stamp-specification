@@ -14,7 +14,7 @@ test('compose function', assert => {
 test('compose.staticProperties', nest => {
   ['staticProperties', 'deepStaticProperties'].forEach(descriptorName => {
 
-    nest.test('...for descriptor', assert => {
+    nest.test(`...for descriptor with ${descriptorName}`, assert => {
       const actual = compose({
         [ descriptorName ]: {
           a: 'a'
@@ -36,7 +36,7 @@ test('compose.staticProperties', nest => {
       assert.end();
     });
 
-    nest.test('...for stamp', assert => {
+    nest.test(`...for stamp with ${descriptorName}`, assert => {
       const stamp = compose({
         [ descriptorName ]: {
           a: 'a'
