@@ -2,7 +2,7 @@ import merge from 'lodash/merge';
 const assign = Object.assign;
 const isFunction = obj => typeof obj === 'function';
 const isObject = obj => !!obj && (typeof obj === 'function' || typeof obj === 'object');
-const isDescriptor = obj => isObject(obj);
+const isDescriptor = isObject;
 
 const createStamp = (composeMethod) => {
   const {
