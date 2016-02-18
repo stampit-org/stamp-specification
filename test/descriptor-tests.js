@@ -22,8 +22,8 @@ test('comopose function pojo (Plain Old JavaScript Object)', nest => {
         }
       };
 
-      const actual = compose(descriptor).compose[ descriptorName ].a;
-      const expected = { b: 'b' };
+      const actual = compose(descriptor).compose[descriptorName].a;
+      const expected = {b: 'b'};
 
       assert.deepEqual(actual, expected,
         `should create ${ descriptorName } descriptor`);
@@ -37,15 +37,15 @@ test('comopose function pojo (Plain Old JavaScript Object)', nest => {
 test('compose function pojo', nest => {
 
   nest.test('...with pojo descriptor.methods', assert => {
-    const a = function a () {
+    const a = function a() {
       return 'a';
     };
 
     const actual = Object.getPrototypeOf(compose({
-      methods: { a }
+      methods: {a}
     })());
 
-    const expected = { a };
+    const expected = {a};
 
     assert.deepEqual(actual, expected,
       'should create methods descriptor');
@@ -54,15 +54,15 @@ test('compose function pojo', nest => {
   });
 
   nest.test('...with pojo descriptor.initializers', assert => {
-    const a = function a () {
+    const a = function a() {
       return 'a';
     };
 
     const actual = compose({
-      initializers: [ a ]
+      initializers: [a]
     }).compose.initializers;
 
-    const expected = [ a ];
+    const expected = [a];
 
     assert.deepEqual(actual, expected,
       'should create initializers descriptor');

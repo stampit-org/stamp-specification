@@ -1,12 +1,14 @@
 {
   "name": "stamp-specification",
   "version": "1.0.0-beta",
-  "description": "The Composables specification",
-  "main": "index.js",
+  "description": "The Composables specification and example implementation",
+  "main": "build/index.js",
   "scripts": {
+    "build": "babel -s -d build examples",
     "lint": "eslint examples && eslint test",
-    "test": "babel-node test/index.js",
-    "watch": "watch 'clear && npm run -s lint && npm -s test' test/ examples/"
+    "test": "tape -r babel/register test/index.js",
+    "watch": "watch 'clear && npm run -s lint && npm -s test' test/ examples/",
+    "prepublish": "npm run lint && npm run test && npm run build"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,6 @@
 import './assignment-tests';
 import './compose-basic-tests';
+import './compose-tests';
 import './descriptor-tests';
 import './initializer-tests';
 import './merge-tests';
