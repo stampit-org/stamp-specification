@@ -68,3 +68,30 @@ test('compose is replaceable', assert => {
 
   assert.end();
 });
+
+test('replaced compose method is always a new object', assert => {
+  function newCompose() {
+    return compose({staticProperties: {compose: newCompose}}, this, arguments);
+  }
+  const stamp1 = newCompose();
+  const compose1 = stamp1.compose;
+  const stamp2 = stamp1.compose();
+  const compose2 = stamp2.compose;
+
+  assert.notEqual(compose1, compose2, 'should be different objects');
+
+  assert.end();
+});
+
+test('replaced compose method is always a function', assert => {
+  function newCompose() {
+    return compose({staticProperties: {compose: newCompose}}, this, arguments);
+  }
+  const overridenCompose = newCompose().compose().compose;
+  const actual = _.isFunction(overridenCompose);
+  const expected = true;
+
+  assert.equal(actual, expected, 'should be a function');
+
+  assert.end();
+});
