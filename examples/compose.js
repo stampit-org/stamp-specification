@@ -7,7 +7,7 @@ const isDescriptor = isObject;
 const createStamp = (descriptor) => {
   const {
     methods, properties, deepProperties, propertyDescriptors, initializers,
-    staticProperties, deepStaticProperties, staticPropertyDescriptors
+    staticProperties, staticDeepProperties, staticPropertyDescriptors
     } = descriptor;
 
   const Stamp = function Stamp(options, ...args) {
