@@ -3,7 +3,7 @@ import compose from '../examples/compose';
 
 const mergeProps = [
   'deepProperties',
-  'deepStaticProperties',
+  'staticDeepProperties',
   'configuration'
 ];
 

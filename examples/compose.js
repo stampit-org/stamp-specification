@@ -7,7 +7,7 @@ const isDescriptor = isObject;
 const createStamp = (composeMethod) => {
   const {
     methods, properties, deepProperties, propertyDescriptors, initializers,
-    staticProperties, deepStaticProperties, staticPropertyDescriptors
+    staticProperties, staticDeepProperties, staticPropertyDescriptors
     } = composeMethod;
 
   const Stamp = function Stamp(options, ...args) {
@@ -31,7 +31,7 @@ const createStamp = (composeMethod) => {
     return obj;
   };
 
-  merge(Stamp, deepStaticProperties);
+  merge(Stamp, staticDeepProperties);
   assign(Stamp, staticProperties);
   if (staticPropertyDescriptors) Object.defineProperties(Stamp, staticPropertyDescriptors);
   Stamp.compose = composeMethod;
@@ -52,9 +52,9 @@ function mergeInComposable(dstDescriptor, src) {
   combineDescriptorProperty('methods', assign);
   combineDescriptorProperty('properties', assign);
   combineDescriptorProperty('deepProperties', merge);
-  combineDescriptorProperty('staticProperties', assign);
-  combineDescriptorProperty('deepStaticProperties', merge);
   combineDescriptorProperty('propertyDescriptors', assign);
+  combineDescriptorProperty('staticProperties', assign);
+  combineDescriptorProperty('staticDeepProperties', merge);
   combineDescriptorProperty('staticPropertyDescriptors', assign);
   combineDescriptorProperty('configuration', merge);
   dstDescriptor.initializers = [].concat(dstDescriptor.initializers, srcDescriptor.initializers).filter(isFunction);

@@ -6,7 +6,7 @@ test('comopose function pojo (Plain Old JavaScript Object)', nest => {
     'properties',
     'deepProperties',
     'staticProperties',
-    'deepStaticProperties',
+    'staticDeepProperties',
     'propertyDescriptors',
     'staticPropertyDescriptors',
     'configuration'
