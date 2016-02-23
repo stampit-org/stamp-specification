@@ -77,7 +77,7 @@ test('compose override priorities', nest => {
 
   nest.test('...with staticProperties', assert => {
     const stamp = compose({
-      deepStaticProperties: {
+      staticDeepProperties: {
         d: 'deep'
       },
       staticProperties: {
@@ -88,7 +88,7 @@ test('compose override priorities', nest => {
     const expected = 'staticProps';
 
     assert.equal(actual, expected,
-      'staticProperties should override deepStaticProperties');
+      'staticProperties should override staticDeepProperties');
     assert.end();
   });
 });

@@ -35,28 +35,28 @@ test('Deep static properties', nest => {
   nest.test('...should be cloned for descriptors', assert => {
     const deepInstance = { e: 'deep' };
     const stamp = compose({
-      deepStaticProperties: {
+      staticDeepProperties: {
         obj: deepInstance
       }
     });
-    const actual = stamp.compose.deepStaticProperties.obj;
+    const actual = stamp.compose.staticDeepProperties.obj;
 
     assert.notEqual(actual, deepInstance,
-      'deepStaticProperties should not be assigned between descriptors');
+      'staticDeepProperties should not be assigned between descriptors');
     assert.end();
   });
 
   nest.test('...should be cloned for new stamps', assert => {
     const stamp = compose({
-      deepStaticProperties: {
+      staticDeepProperties: {
         obj: { e: 'deep' }
       }
     });
-    const notExpected = stamp.compose.deepStaticProperties.obj;
+    const notExpected = stamp.compose.staticDeepProperties.obj;
     const actual = stamp.obj;
 
     assert.notEqual(actual, notExpected,
-      'deepStaticProperties should not be assigned from descriptor to stamp');
+      'staticDeepProperties should not be assigned from descriptor to stamp');
     assert.end();
   });
 });
