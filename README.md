@@ -62,13 +62,27 @@ const combinedStamp = baseStamp.compose(composable1, composable2, composable3);
 The `.compose()` method doubles as the stamp's descriptor. In other words, descriptor properties are attached to the stamp `.compose()` method, e.g. `stamp.compose.methods`.
 
 
+#### Overriding `.compose()` method
+
+It is possible to override the `.compose()` method of a stamp using `staticProperties`. Handy for debugging purposes.
+
+```js
+import differentComposeImplementation from 'different-compose-implementation';
+const composeOverriddenStamp = stamp.compose({
+  staticProperties: {
+    compose: differentComposeImplementation
+  }
+});  
+```
+
+
 ### Descriptor
 
 **Composable descriptor** (or just **descriptor**) is a meta data object which contains the information necessary to create an object instance.
 
 
 
-### Standalone `compose()` function (optional)
+### Standalone `compose()` pure function (optional)
 
 ```js
 (...args?: Composable[]) => Stamp
@@ -76,6 +90,14 @@ The `.compose()` method doubles as the stamp's descriptor. In other words, descr
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
 
+#### Detached `compose()` method
+
+The `.compose()` method of any stamp can be detached and used as a standalone `compose()` pure function.
+
+```js
+const compose = thirdPartyStamp.compose;
+const myStamp = compose(myComposable1, myComposable2);
+```
 
 ## Implementation details
 
@@ -151,7 +173,7 @@ It is possible for properties to collide, between both stamps, and between diffe
 **Different descriptor properties, one or more stamps:**
 
 * Shallow properties override deep properties
-* Descriptors override everything
+* Property Descriptors override everything
 
 #### Configuration
 
@@ -181,7 +203,7 @@ const myStamp = compose(config, warnOnCollisions);
 ```
 
 
-### Stamp Options
+### Stamp Arguments
 
 It is recommended that stamps only take one argument: The stamp `options` argument. There are no reserved properties and no special meaning. However, using multiple arguments for a stamp could create conflicts where multiple stamps expect the same argument to mean different things. Using named parameters, it's possible for stamp creator to resolve conflicts with `options` namespacing. For example, if you want to compose a database connection stamp with a message queue stamp:
 
@@ -261,6 +283,6 @@ Initializers have the following signature:
 * *Thenable* ~ *Composable*.
 * `.then` ~ `.compose`.
 * *Promise* ~ *Stamp*.
-* `new Promise(function(resolve, reject))` ~ `compose(...stampsOrDescriptors)`
+* `new Promise(function(resolve, reject))` ~ `compose(...composables)`
 
 -----
