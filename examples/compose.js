@@ -4,11 +4,11 @@ const isFunction = obj => typeof obj === 'function';
 const isObject = obj => !!obj && (typeof obj === 'function' || typeof obj === 'object');
 const isDescriptor = isObject;
 
-const createStamp = (composeMethod) => {
+const createStamp = (descriptor) => {
   const {
     methods, properties, deepProperties, propertyDescriptors, initializers,
     staticProperties, staticDeepProperties, staticPropertyDescriptors
-    } = composeMethod;
+    } = descriptor;
 
   const Stamp = function Stamp(options, ...args) {
     let obj = Object.create(methods || {});
@@ -34,7 +34,12 @@ const createStamp = (composeMethod) => {
   merge(Stamp, staticDeepProperties);
   assign(Stamp, staticProperties);
   if (staticPropertyDescriptors) Object.defineProperties(Stamp, staticPropertyDescriptors);
-  Stamp.compose = composeMethod;
+
+  const composeImplementation = isFunction(Stamp.compose) ? Stamp.compose : compose;
+  Stamp.compose = function () {
+    return composeImplementation.apply(this, arguments);
+  };
+  assign(Stamp.compose, descriptor);
 
   return Stamp;
 };
@@ -63,13 +68,7 @@ function mergeInComposable(dstDescriptor, src) {
 }
 
 function compose(...composables) {
-  let composeMethod = function (...args) {
-    return compose(composeMethod, ...args);
-  };
-
-  composeMethod = composables.reduce(mergeInComposable, composeMethod);
-
-  return createStamp(composeMethod);
+  return createStamp(composables.reduce(mergeInComposable, mergeInComposable({}, this)));
 }
 
 export default compose;
