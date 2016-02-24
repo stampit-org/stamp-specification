@@ -10,7 +10,7 @@ function createStamp(descriptor = {}, composeFunction) {
 
     merge(obj, descriptor.deepProperties);
     assign(obj, descriptor.properties);
-    Object.defineProperties(obj, descriptor.propertyDescriptors || 0);
+    Object.defineProperties(obj, descriptor.propertyDescriptors || {});
 
     if (Array.isArray(descriptor.initializers)) {
       descriptor.initializers.forEach(initializer => {
@@ -27,7 +27,7 @@ function createStamp(descriptor = {}, composeFunction) {
 
   merge(Stamp, descriptor.staticDeepProperties);
   assign(Stamp, descriptor.staticProperties);
-  Object.defineProperties(Stamp, descriptor.staticPropertyDescriptors || 0);
+  Object.defineProperties(Stamp, descriptor.staticPropertyDescriptors || {});
 
   const composeImplementation = isFunction(Stamp.compose) ? Stamp.compose : composeFunction;
   Stamp.compose = function () {
