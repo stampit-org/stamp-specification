@@ -184,4 +184,20 @@ test('stamp()', nest => {
 
     assert.end();
   });
+
+  nest.test('...with rubbish` in initializer', assert => {
+    const composable = function () {};
+    composable.compose = function () {};
+    composable.compose.initializers = [0, 1, null, NaN, 'string', true, false];
+    const stamp = compose(composable);
+    stamp.compose.initializers = [0, 1, null, NaN, 'string', true, false];
+
+    const actual = compose(stamp)();
+    const expected = {};
+
+    assert.deepEqual(actual, expected,
+      'should avoid non functions in initializers array');
+
+    assert.end();
+  });
 });

@@ -12,17 +12,13 @@ function createStamp(descriptor = {}, composeFunction) {
     assign(obj, descriptor.properties);
     Object.defineProperties(obj, descriptor.propertyDescriptors || {});
 
-    if (Array.isArray(descriptor.initializers)) {
-      descriptor.initializers.forEach(initializer => {
-        const returnValue = initializer.call(obj, options,
-          {instance: obj, stamp: Stamp, args: [options].concat(args)});
-        if (returnValue !== undefined) {
-          obj = returnValue;
-        }
-      });
-    }
+    if (!descriptor.initializers || descriptor.initializers.length === 0) return obj;
 
-    return obj;
+    return descriptor.initializers.reduce((resultingObj, initializer) => {
+      const returnedValue = initializer.call(resultingObj, options,
+        {instance: resultingObj, stamp: Stamp, args: [options].concat(args)});
+      return returnedValue === undefined ? resultingObj : returnedValue;
+    }, obj);
   }
 
   merge(Stamp, descriptor.staticDeepProperties);
