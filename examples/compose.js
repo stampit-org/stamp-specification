@@ -15,7 +15,7 @@ const isDescriptor = isObject;
  * @param {object} descriptor The information about the object the factory will be creating.
  * @returns {Function} The new factory function.
  */
-function createFactoryInstance(descriptor) {
+function createFactory(descriptor) {
   return function Stamp(options, ...args) {
     let obj = Object.create(descriptor.methods || {});
 
@@ -40,7 +40,7 @@ function createFactoryInstance(descriptor) {
  * @returns {Function}
  */
 function createStamp(descriptor, composeFunction) {
-  const Stamp = createFactoryInstance(descriptor);
+  const Stamp = createFactory(descriptor);
 
   merge(Stamp, descriptor.staticDeepProperties);
   assign(Stamp, descriptor.staticProperties);
