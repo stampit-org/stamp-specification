@@ -35,6 +35,6 @@
     "watch": "^0.16.0"
   },
   "dependencies": {
-    "lodash": "^4.3.0"
+    "lodash": "^4.5.1"
   }
 }

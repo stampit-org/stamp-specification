@@ -4,11 +4,17 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
  */
 
-import merge from 'lodash/merge';
+import mergeWith from 'lodash/mergeWith';
 const assign = Object.assign;
 const isFunction = obj => typeof obj === 'function';
 const isObject = obj => !!obj && (typeof obj === 'function' || typeof obj === 'object');
 const isDescriptor = isObject;
+const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
+  if (Array.isArray(dstValue)) {
+    if (Array.isArray(srcValue)) return dstValue.concat(srcValue);
+    if (isObject(srcValue)) return merge({}, srcValue);
+  }
+});
 
 /**
  * Creates new factory instance.
