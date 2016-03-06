@@ -116,7 +116,7 @@ Stamp.compose(...args?: Composable[]) => Stamp
 
 **Creates stamps.**
 
-A method exposed by all composables, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
+A method exposed by all stamps, identical to `compose()`, except it prepends `this` to the stamp parameters. Stamp descriptor properties are attached to the `.compose` method, e.g. `stamp.compose.methods`.
 
 
 ### The Stamp Descriptor
