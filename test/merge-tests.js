@@ -1,4 +1,5 @@
 import test from 'tape';
+import _ from 'lodash';
 import compose from '../examples/compose';
 
 const mergeProps = [
@@ -362,14 +363,12 @@ test('Deep array merge', nest => {
     });
 
     nest.test('array replaces undefined', (t) => {
-      const a = {
-        foo: undefined
-      };
+      const a = {};
       const b = {
-        foo: [1, 2, 3]
+        foo: [1, _, _.noop]
       };
       const expected = {
-        foo: [1, 2, 3]
+        foo: [1, _, _.noop]
       };
 
       const actual = deepMerge(a, b);
@@ -382,13 +381,13 @@ test('Deep array merge', nest => {
 
     nest.test('undefined does not replace array', (t) => {
       const a = {
-        foo: [1, 2, 3]
+        foo: [1, _, _.noop]
       };
       const b = {
         foo: undefined
       };
       const expected = {
-        foo: [1, 2, 3]
+        foo: [1, _, _.noop]
       };
 
       const actual = deepMerge(a, b);
