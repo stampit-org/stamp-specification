@@ -5,7 +5,7 @@ import compose from '../examples/compose';
 const mergeProps = [
   'deepProperties',
   'staticDeepProperties',
-  'configuration'
+  'deepConfiguration'
 ];
 
 
