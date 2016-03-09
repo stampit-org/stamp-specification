@@ -140,28 +140,28 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 
 * `methods` - A set of methods that will be added to the object's delegate prototype.
 * `properties` - A set of properties that will be added to new object instances by assignment.
-* `deepProperties` - A set of properties that will be added to new object instances by assignment with deep property merge.
+* `deepProperties` - A set of properties that will be added to new object instances by deep property merge, except arrays are concatenated.
 * `propertyDescriptors` - A set of [object property
 descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
-* `staticDeepProperties` - A set of static properties that will be added to the stamp by assignment with deep property merge.
+* `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge, except arrays are concatenated.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
-* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged.
+* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged, except arrays are concatenated.
 
 #### Composing Descriptors
 
 Descriptors are composed together to create new descriptors with the following rules:
 
-* `methods` are copied by assignment: `descriptor.methods = _.assign({}, descriptor1.methods, descriptor2.methods)`
-* `properties` are copied by assignment: `descriptor.properties = _.assign({}, descriptor1.properties, descriptor2.properties)`
-* `deepProperties` are deep merged: `descriptor.deepProperties = _.merge({}, descriptor1.deepProperties, descriptor2.deepProperties)`
-* `propertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
-* `staticProperties` are copied by assignment: `descriptor.staticProperties = _.assign({}, descriptor1.staticProperties, descriptor2.staticProperties)`
-* `staticDeepProperties` are deep merged: `descriptor.staticDeepProperties = _.merge({}, descriptor1.staticDeepProperties, descriptor2.staticDeepProperties)`
-* `staticPropertyDescriptors` are copied by assignment: `descriptor.propertyDescriptors = _.assign({}, descriptor1.propertyDescriptors, descriptor2.propertyDescriptors)`
-* `initializers` are appended: `descriptor.initializers = descriptor1.initializers.concat(descriptor2.initializers)`
-* `configuration` are deep merged: `descriptor.configuration = _.merge({}, descriptor1.configuration, descriptor2.configuration)`
+* `methods` are copied by assignment as in `Object.assign()`.
+* `properties` are copied by assignment as in `Object.assign()`.
+* `deepProperties` are deep merged, except arrays are concatenated.
+* `propertyDescriptors` are copied by assignment as in `Object.assign()`.
+* `staticProperties` are copied by assignment as in `Object.assign()`.
+* `staticDeepProperties` are deep merged, except arrays are concatenated
+* `staticPropertyDescriptors` are copied by assignment as in `Object.assign()`.
+* `initializers` are concatenated as in `Array.concat()`.
+* `configuration` are deep merged, except arrays are concatenated.
 
 
 #### Priority Rules
