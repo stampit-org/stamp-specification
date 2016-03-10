@@ -161,7 +161,8 @@ Descriptors are composed together to create new descriptors with the following r
 * `staticDeepProperties` are deep merged, except arrays are concatenated
 * `staticPropertyDescriptors` are copied by assignment as in `Object.assign()`.
 * `initializers` are concatenated as in `Array.concat()`.
-* `configuration` are deep merged, except arrays are concatenated.
+* `configuration` are copied by assignment as in `Object.assign()`.
+* `deepConfiguration` are deep merged, except arrays are concatenated.
 
 
 #### Priority Rules
@@ -185,16 +186,17 @@ Stamp composition and instance creation behaviors can be manipulated by configur
 import warnOnCollisions from 'collision-stamp';
 
 const config = compose({
-  configuration: {
-    collisions: {
+  deepConfiguration: {
+    collision: {
       warnOnCollision: true,
       warn (msg) {
-        const entry = {
+        const entry = JSON.stringify({
           date: Date.now(),
           message: msg
-        };
-        console.log(JSON.stringify(entry));
-      }
+        });
+        this.collision.loggers.forEach(log => log(entry));
+      },
+      loggers: [console.log]
     }
   }
 });

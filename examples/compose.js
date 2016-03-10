@@ -84,7 +84,8 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('staticProperties', assign);
   combineProperty('staticDeepProperties', merge);
   combineProperty('staticPropertyDescriptors', assign);
-  combineProperty('configuration', merge);
+  combineProperty('configuration', assign);
+  combineProperty('deepConfiguration', merge);
   dstDescriptor.initializers = [].concat(dstDescriptor.initializers, srcDescriptor.initializers).filter(isFunction);
 
   return dstDescriptor;
