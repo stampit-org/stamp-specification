@@ -131,7 +131,8 @@ interface Descriptor {
   staticDeepProperties?: Object,
   staticPropertyDescriptors?: Object,
   initializers?: Array,
-  configuration?: Object
+  configuration?: Object,
+  deepConfiguration?: Object
 }
 ```
 
@@ -147,7 +148,8 @@ descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 * `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge, except arrays are concatenated.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `initializers` - A set of functions that will run in sequence. Stamp details and arguments get passed to initializers.
-* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. Configuration properties get deep merged, except arrays are concatenated.
+* `configuration` - A set of options made available to the stamp and its initializers during object instance creation. These will be copied by assignment.
+* `deepConfiguration` - A set of options made available to the stamp and its initializers during object instance creation. These will be deep merged, except arrays are concatenated.
 
 #### Composing Descriptors
 
