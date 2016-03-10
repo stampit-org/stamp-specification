@@ -85,7 +85,7 @@ test('replaced compose method is always a new object', assert => {
 
 test('replaced compose method is always a function', assert => {
   function newCompose() {
-    return compose({staticProperties: {compose: newCompose}}, this, arguments);
+    return compose({staticProperties: {compose: 'rubbish'}}, this, arguments);
   }
   const overridenCompose = newCompose().compose().compose;
   const actual = _.isFunction(overridenCompose);
