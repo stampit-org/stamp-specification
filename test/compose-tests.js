@@ -1,6 +1,5 @@
 import test from 'tape';
 import _ from 'lodash';
-import compose from '../examples/compose';
 
 test('compose ignores non objects', assert => {
   const stamp = compose(0, 'a', null, undefined, {}, NaN, /regexp/);

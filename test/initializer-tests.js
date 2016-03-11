@@ -1,6 +1,4 @@
 import test from 'tape';
-import compose from '../examples/compose';
-
 
 const build = (num) => {
 
@@ -41,7 +39,7 @@ const buildInitializers = () => {
 
 test('compose()', nest => {
 
-  nest.test(`...with no initializers`, assert => {
+  nest.test('...with no initializers', assert => {
     const subject = compose({ initializers: [ 0, 'a', null, undefined, {}, NaN, /regexp/ ]});
     const initializers = subject.compose.initializers;
 
@@ -51,7 +49,7 @@ test('compose()', nest => {
     assert.end();
   });
 
-  nest.test(`...with two initializers`, assert => {
+  nest.test('...with two initializers', assert => {
     const subject = compose(build(1), build(2));
     const initializers = subject.compose.initializers;
 
@@ -64,7 +62,7 @@ test('compose()', nest => {
     assert.end();
   });
 
-  nest.test(`...with two initializers`, assert => {
+  nest.test('...with two initializers', assert => {
     const subject = compose(build(1), build(2));
     const initializers = subject.compose.initializers;
 
@@ -77,7 +75,7 @@ test('compose()', nest => {
     assert.end();
   });
 
-  nest.test(`...with three initializers`, assert => {
+  nest.test('...with three initializers', assert => {
     const subject = compose(build(1), build(2), build(3));
     const initializers = subject.compose.initializers;
 

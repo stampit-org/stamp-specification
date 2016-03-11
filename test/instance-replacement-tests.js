@@ -1,5 +1,4 @@
 import test from 'tape';
-import compose from '../examples/compose';
 
 [0, 1, null, NaN, 'string', true, false].forEach(obj => {
   test('initializer returns ' + obj, assert => {

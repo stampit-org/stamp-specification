@@ -1,11 +1,7 @@
-import './assignment-tests';
-import './compose-basic-tests';
-import './compose-tests';
-import './descriptor-tests';
-import './initializer-tests';
-import './merge-tests';
-import './priority-tests';
-import './property-descriptor-tests';
-import './stamp-tests';
-import './instance-replacement-tests';
-import './property-safety-tests.js';
+require('babel-register');
+require('babel-polyfill');
+
+var compose = require('../examples/compose').default;
+global.compose = compose;
+
+require('./run-all');

@@ -1,5 +1,4 @@
 import test from 'tape';
-import compose from '../examples/compose';
 
 const build = (prop, key, val = key) => {
   const composable = function () {};
