@@ -9,7 +9,7 @@ The composables specification exists in order to define a standard format for co
 
 The specification is currently used by the following officially supported implementations:
 
-* [Reference Implementation](examples/compose.js)
+* [Reference Implementation](./compose.js)
 * [Stamp Utils](https://github.com/stampit-org/stamp-utils) Functional, microlibrary style stamp utilities.
 * [Stampit 3.0](https://github.com/stampit-org/stampit) V3+ uses the stamp specification.
 * [react-stamp](https://github.com/troutowicz/react-stamp) A great choice for `class`-free React components.
