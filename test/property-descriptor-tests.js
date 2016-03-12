@@ -1,6 +1,5 @@
 import test from 'tape';
 import _ from 'lodash';
-import compose from '../examples/compose';
 
 const createDescriptors = () => {
   const a = {

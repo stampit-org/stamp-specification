@@ -1,5 +1,4 @@
 import test from 'tape';
-import compose from '../examples/compose';
 
 test('Deep properties', nest => {
   nest.test('...should be cloned for descriptors', assert => {

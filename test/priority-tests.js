@@ -1,5 +1,4 @@
 import test from 'tape';
-import compose from '../examples/compose';
 
 const buildDescriptor = (obj) => {
   return Object.assign({}, {
