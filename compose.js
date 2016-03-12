@@ -5,9 +5,10 @@ The code is optimized to be as readable as possible.
  */
 
 import mergeWith from 'lodash/mergeWith';
-const assign = Object.assign;
-const isFunction = obj => typeof obj === 'function';
-const isObject = obj => !!obj && (typeof obj === 'function' || typeof obj === 'object');
+import assign from 'lodash/assign';
+import isFunction from 'lodash/isFunction';
+import isObject from 'lodash/isObject';
+
 const isDescriptor = isObject;
 const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
   if (Array.isArray(dstValue)) {
