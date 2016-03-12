@@ -1,6 +1,6 @@
 {
   "name": "stamp-specification",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "description": "The Composables specification and example implementation",
   "main": "compose.js",
   "scripts": {
