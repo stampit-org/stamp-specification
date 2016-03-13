@@ -1,9 +1,9 @@
-# Stamp Specification: Composables
+# Stamp Specification v1
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Introduction
 
-The composables specification exists in order to define a standard format for composable factory functions (called **stamps**), and ensure compatibility between different stamp implementations.
+This specification exists in order to define a standard format for composable factory functions (called **stamps**), and ensure compatibility between different stamp implementations.
 
 ## Status
 
