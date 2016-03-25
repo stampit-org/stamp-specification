@@ -130,7 +130,7 @@ interface Descriptor {
   staticProperties?: Object,
   staticDeepProperties?: Object,
   staticPropertyDescriptors?: Object,
-  initializers?: Array,
+  initializers?: Function[],
   configuration?: Object,
   deepConfiguration?: Object
 }
