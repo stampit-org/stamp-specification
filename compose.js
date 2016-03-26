@@ -101,6 +101,6 @@ function mergeComposable(dstDescriptor, srcComposable) {
  * @returns {Function} A new stamp (aka composable factory function).
  */
 export default function compose(...composables) {
-  const descriptor = [this].concat(composables).reduce(mergeComposable, {});
+  const descriptor = [this].concat(composables).filter(isObject).reduce(mergeComposable, {});
   return createStamp(descriptor, compose);
 }
