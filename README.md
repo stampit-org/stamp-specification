@@ -40,7 +40,7 @@ A **stamp** is a composable factory function that returns object instances based
 
 
 ```js
-stamp(options?: Object, ...args?: Any[]) => instance: object
+stamp(options?: Object|Any, ...args?: Any[]) => instance: Any
 ```
 
 ```js
@@ -104,7 +104,7 @@ const myStamp = compose(myComposable1, myComposable2);
 ### Stamp
 
 ```js
-Stamp(options?: Object, ...args?: Any[]) => Instance: Object
+Stamp(options?: Object, ...args?: Any[]) => Instance: Any
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
@@ -271,13 +271,14 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options: Object, { instance: Object, stamp: Stamp, args: Array }) => instance: Object
+(options: Object, { instance: Any, stamp: Stamp, args: Any[], shared: Object }) => instance: Any
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
 * `instance` The object instance being produced by the stamp. If the initializer returns a value other than `undefined`, it replaces the instance.
 * `stamp` A reference to the stamp producing the instance.
 * `args` An array of the arguments passed into the stamp, including the `options` argument.
+* `shared` A same object passed to each initializer. Created per instance. Also known as "protected" state. 
 
 
 -----
