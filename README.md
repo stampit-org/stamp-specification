@@ -104,7 +104,7 @@ const myStamp = compose(myComposable1, myComposable2);
 ### Stamp
 
 ```js
-Stamp(options?: Object, ...args?: Any[]) => Instance: Any
+Stamp(options?: Object|Any, ...args?: Any[]) => Instance: Any
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
@@ -271,7 +271,7 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options: Object, { instance: Any, stamp: Stamp, args: Any[], shared: Object }) => instance: Any
+(options?: Object|Any, { instance: Any, stamp: Stamp, args: Any[], shared: Object }) => instance: Any
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
