@@ -32,7 +32,7 @@ function createFactory(descriptor) {
 
     if (!descriptor.initializers || descriptor.initializers.length === 0) return obj;
 
-    return descriptor.initializers.reduce((resultingObj, initializer) => {
+    return descriptor.initializers.filter(isFunction).reduce((resultingObj, initializer) => {
       const returnedValue = initializer.call(resultingObj, options,
         {instance: resultingObj, stamp: Stamp, args: [options].concat(args)});
       return returnedValue === undefined ? resultingObj : returnedValue;
