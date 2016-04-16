@@ -10,7 +10,7 @@ import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
 
 const isDescriptor = isObject;
-const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
+export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
   if (Array.isArray(dstValue)) {
     if (Array.isArray(srcValue)) return dstValue.concat(srcValue);
     if (isObject(srcValue)) return merge({}, srcValue);
