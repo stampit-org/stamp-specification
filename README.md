@@ -1,4 +1,4 @@
-# Stamp Specification v1
+# Stamp Specification v1.1
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Introduction
@@ -162,7 +162,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `staticProperties` are copied by assignment as in `Object.assign()`.
 * `staticDeepProperties` are deep merged, except arrays are concatenated
 * `staticPropertyDescriptors` are copied by assignment as in `Object.assign()`.
-* `initializers` are uniquely concatenated as in `_.unioun()`.
+* `initializers` are uniquely concatenated as in `_.union()`.
 * `configuration` are copied by assignment as in `Object.assign()`.
 * `deepConfiguration` are deep merged, except arrays are concatenated.
 
