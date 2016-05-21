@@ -89,7 +89,7 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('deepConfiguration', merge);
   if (Array.isArray(srcDescriptor.initializers)) {
     dstDescriptor.initializers = srcDescriptor.initializers.reduce((result, init) => {
-      if (isFunction(init) && !result.includes(init)) {
+      if (isFunction(init) && result.indexOf(init) < 0) {
         result.push(init);
       }
       return result;
