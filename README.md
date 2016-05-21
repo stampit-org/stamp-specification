@@ -162,7 +162,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `staticProperties` are copied by assignment as in `Object.assign()`.
 * `staticDeepProperties` are deep merged, except arrays are concatenated
 * `staticPropertyDescriptors` are copied by assignment as in `Object.assign()`.
-* `initializers` are concatenated as in `Array.concat()`.
+* `initializers` are uniquely concatenated as in `_.unioun()`.
 * `configuration` are copied by assignment as in `Object.assign()`.
 * `deepConfiguration` are deep merged, except arrays are concatenated.
 
