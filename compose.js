@@ -88,12 +88,12 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('configuration', assign);
   combineProperty('deepConfiguration', merge);
   if (Array.isArray(srcDescriptor.initializers)) {
-    if (!Array.isArray(dstDescriptor.initializers)) dstDescriptor.initializers = [];
-    srcDescriptor.initializers.forEach(i => {
-      if (isFunction(i) && dstDescriptor.initializers.indexOf(i) < 0) {
-        dstDescriptor.initializers.push(i);
+    dstDescriptor.initializers = srcDescriptor.initializers.reduce((result, init) => {
+      if (isFunction(init) && !result.includes(init)) {
+        result.push(init);
       }
-    });
+      return result;
+    }, Array.isArray(dstDescriptor.initializers) ? dstDescriptor.initializers : []);
   }
 
   return dstDescriptor;
