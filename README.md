@@ -40,7 +40,7 @@ A **stamp** is a composable factory function that returns object instances based
 
 
 ```js
-stamp(options?: Object, ...args?: Any[]) => instance: object
+stamp(options?: Object, ...args?: [...Any]) => instance: object
 ```
 
 ```js
@@ -50,7 +50,7 @@ const newObject = stamp();
 Stamps have a method called `.compose()`:
 
 ```js
-Stamp.compose(...args?: Composable[]) => Stamp
+Stamp.compose(...args?: [...Composable]) => Stamp
 ```
 
 When called the `.compose()` method creates new stamp using the current stamp as a base, composed with a list of *composables* passed as arguments:
@@ -85,7 +85,7 @@ const composeOverriddenStamp = stamp.compose({
 ### Standalone `compose()` pure function (optional)
 
 ```js
-(...args?: Composable[]) => Stamp
+(...args?: [...Composable]) => Stamp
 ```
 
 **Creates stamps.** Take any number of stamps or descriptors. Return a new stamp that encapsulates combined behavior. If nothing is passed in, it returns an empty stamp.
@@ -104,14 +104,14 @@ const myStamp = compose(myComposable1, myComposable2);
 ### Stamp
 
 ```js
-Stamp(options?: Object, ...args?: Any[]) => Instance: Object
+Stamp(options?: Object, ...args?: [...Any]) => Instance: Object
 ```
 
 **Creates object instances.** Take an options object and return the resulting instance.
 
 
 ```js
-Stamp.compose(...args?: Composable[]) => Stamp
+Stamp.compose(...args?: [...Composable]) => Stamp
 ```
 
 **Creates stamps.**
@@ -130,7 +130,7 @@ interface Descriptor {
   staticProperties?: Object,
   staticDeepProperties?: Object,
   staticPropertyDescriptors?: Object,
-  initializers?: Function[],
+  initializers?: [...Function],
   configuration?: Object,
   deepConfiguration?: Object
 }
