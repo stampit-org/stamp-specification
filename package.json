@@ -36,6 +36,7 @@
     "eslint": "~2.2.0"
   },
   "dependencies": {
+    "deepmerge": "^0.2.10",
     "lodash": "^4.5.1"
   },
   "babel": {
