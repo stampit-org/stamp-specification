@@ -279,6 +279,7 @@ Initializers have the following signature:
 * `stamp` A reference to the stamp producing the instance.
 * `args` An array of the arguments passed into the stamp, including the `options` argument.
 
+Note that if nothing is passed to factory function, `options` will be ensured to be an empty object.
 
 -----
 

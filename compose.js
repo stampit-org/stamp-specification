@@ -23,7 +23,7 @@ export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
  * @returns {Function} The new factory function.
  */
 function createFactory(descriptor) {
-  return function Stamp(options, ...args) {
+  return function Stamp(options = {}, ...args) {
     let obj = Object.create(descriptor.methods || {});
 
     merge(obj, descriptor.deepProperties);
