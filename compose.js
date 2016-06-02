@@ -7,10 +7,7 @@ The code is optimized to be as readable as possible.
 import mergeWith from 'lodash/mergeWith';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
-
-if (!isFunction(Object.assign)) {
-  Object.assign = require('lodash/assign');
-}
+import 'core-js/fn/object/assign';
 
 const isDescriptor = isObject;
 export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
