@@ -8,6 +8,10 @@ import mergeWith from 'lodash/mergeWith';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
 
+if (!isFunction(Object.assign)) {
+  Object.assign = require('lodash/assign');
+}
+
 const isDescriptor = isObject;
 export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
   if (Array.isArray(dstValue)) {
