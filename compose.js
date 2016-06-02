@@ -5,9 +5,9 @@ The code is optimized to be as readable as possible.
  */
 
 import mergeWith from 'lodash/mergeWith';
-import assign from 'lodash/assign';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
+import 'core-js/fn/object/assign';
 
 const isDescriptor = isObject;
 export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
@@ -27,7 +27,7 @@ function createFactory(descriptor) {
     let obj = Object.create(descriptor.methods || {});
 
     merge(obj, descriptor.deepProperties);
-    assign(obj, descriptor.properties);
+    Object.assign(obj, descriptor.properties);
     Object.defineProperties(obj, descriptor.propertyDescriptors || {});
 
     if (!descriptor.initializers || descriptor.initializers.length === 0) return obj;
@@ -50,14 +50,14 @@ function createStamp(descriptor, composeFunction) {
   const Stamp = createFactory(descriptor);
 
   merge(Stamp, descriptor.staticDeepProperties);
-  assign(Stamp, descriptor.staticProperties);
+  Object.assign(Stamp, descriptor.staticProperties);
   Object.defineProperties(Stamp, descriptor.staticPropertyDescriptors || {});
 
   const composeImplementation = isFunction(Stamp.compose) ? Stamp.compose : composeFunction;
   Stamp.compose = function () {
     return composeImplementation.apply(this, arguments);
   };
-  assign(Stamp.compose, descriptor);
+  Object.assign(Stamp.compose, descriptor);
 
   return Stamp;
 }
@@ -78,14 +78,14 @@ function mergeComposable(dstDescriptor, srcComposable) {
     action(dstDescriptor[propName], srcDescriptor[propName]);
   };
 
-  combineProperty('methods', assign);
-  combineProperty('properties', assign);
+  combineProperty('methods', Object.assign);
+  combineProperty('properties', Object.assign);
   combineProperty('deepProperties', merge);
-  combineProperty('propertyDescriptors', assign);
-  combineProperty('staticProperties', assign);
+  combineProperty('propertyDescriptors', Object.assign);
+  combineProperty('staticProperties', Object.assign);
   combineProperty('staticDeepProperties', merge);
-  combineProperty('staticPropertyDescriptors', assign);
-  combineProperty('configuration', assign);
+  combineProperty('staticPropertyDescriptors', Object.assign);
+  combineProperty('configuration', Object.assign);
   combineProperty('deepConfiguration', merge);
   if (Array.isArray(srcDescriptor.initializers)) {
     dstDescriptor.initializers = srcDescriptor.initializers.reduce((result, init) => {
