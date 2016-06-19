@@ -92,10 +92,10 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('configuration', assign);
   combineProperty('deepConfiguration', merge);
   if (Array.isArray(srcDescriptor.initializers)) {
-    dstDescriptor.initializers = (dstDescriptor.initializers || [])
+    const initializers = (dstDescriptor.initializers || [])
       .concat(srcDescriptor.initializers)
       .filter(isFunction);
-    dstDescriptor.initializers = uniq(dstDescriptor.initializers);
+    dstDescriptor.initializers = uniq(initializers);
   }
 
   return dstDescriptor;
