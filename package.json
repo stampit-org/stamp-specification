@@ -6,8 +6,9 @@
   "scripts": {
     "build": "babel -s -d build compose.js",
     "lint": "eslint compose.js",
+    "pretest": "npm run build",
     "test": "check-compose .",
-    "prepublish": "npm run lint && npm run build && npm test"
+    "prepublish": "npm run lint && npm test"
   },
   "repository": {
     "type": "git",

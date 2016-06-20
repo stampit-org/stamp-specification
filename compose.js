@@ -4,10 +4,7 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
  */
 
-import mergeWith from 'lodash/mergeWith';
-import assign from 'lodash/assign';
-import isFunction from 'lodash/isFunction';
-import isObject from 'lodash/isObject';
+import {mergeWith, assign, isFunction, isObject, uniq} from 'lodash';
 
 const isDescriptor = isObject;
 export const merge = (dst, src) => mergeWith(dst, src, (dstValue, srcValue) => {
@@ -30,13 +27,16 @@ function createFactory(descriptor) {
     assign(obj, descriptor.properties);
     Object.defineProperties(obj, descriptor.propertyDescriptors || {});
 
-    if (!descriptor.initializers || descriptor.initializers.length === 0) return obj;
-
-    return descriptor.initializers.filter(isFunction).reduce((resultingObj, initializer) => {
-      const returnedValue = initializer.call(resultingObj, options,
-        {instance: resultingObj, stamp: Stamp, args: [options].concat(args)});
-      return returnedValue === undefined ? resultingObj : returnedValue;
-    }, obj);
+    return (descriptor.initializers || [])
+      .filter(isFunction)
+      .reduce((resultingObj, initializer) => {
+        const returnedValue = initializer.call(
+          resultingObj,
+          options,
+          {instance: resultingObj, stamp: Stamp, args: [options].concat(args)}
+        );
+        return returnedValue === undefined ? resultingObj : returnedValue;
+      }, obj);
   };
 }
 
@@ -88,12 +88,10 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('configuration', assign);
   combineProperty('deepConfiguration', merge);
   if (Array.isArray(srcDescriptor.initializers)) {
-    dstDescriptor.initializers = srcDescriptor.initializers.reduce((result, init) => {
-      if (isFunction(init) && result.indexOf(init) < 0) {
-        result.push(init);
-      }
-      return result;
-    }, Array.isArray(dstDescriptor.initializers) ? dstDescriptor.initializers : []);
+    const initializers = (dstDescriptor.initializers || [])
+      .concat(srcDescriptor.initializers)
+      .filter(isFunction);
+    dstDescriptor.initializers = uniq(initializers);
   }
 
   return dstDescriptor;
