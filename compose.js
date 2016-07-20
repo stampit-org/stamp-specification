@@ -147,12 +147,11 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('deepConfiguration', merge);
 
   if (isArray(srcDescriptor.initializers)) {
-    // The initializers must be an array. Always. If not - we fix it. TODO: unit test!
-    let dstInitializers = isArray(dstDescriptor.initializers) ? dstDescriptor.initializers : [];
-    // The initializers array must contain function only.
-    dstInitializers = dstInitializers.concat(srcDescriptor.initializers).filter(isFunction);
-    // The initializers array must not have duplicate initializers. The first occurrence wins.
-    dstDescriptor.initializers = uniq(dstInitializers);
+    // Initializers must be concatenated. '.concat' will also create a new array instance.
+    const dstInitializers = (dstDescriptor.initializers || []).concat(srcDescriptor.initializers);
+    // The resulting initializers array must contain function only, and
+    // must not have duplicate initializers - the first occurrence wins.
+    dstDescriptor.initializers = uniq(dstInitializers.filter(isFunction));
   }
 
   return dstDescriptor;
