@@ -6,7 +6,7 @@ The code is optimized to be as readable as possible.
 
 import {isObject, isFunction, isPlainObject, assign, uniq, isArray} from 'lodash';
 
-// Specification says that arrays are not mergeable, they must be concatenated only.
+// Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
 const isMergeable = value => !isArray(value) && isObject(value);
 
 // Descriptor is typically a function or a plain object. But not an array!
@@ -19,27 +19,27 @@ const isStamp = value => isFunction(value) && isFunction(value.compose);
  * Mutate the 'dst' by deep merging the 'src'. Though, arrays are concatenated.
  * @param {*} dst The object to deep merge 'src' into.
  * @param {*} src The object to merge data from.
- * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
- * Or the 'src' itself if the 'src' is a non-mergeable.
+ * @returns {*} Typically it's the 'dst' itself. Unless it was an array, or a non-mergeable,
+ * or the 'src' itself in case the 'src' is a non-mergeable.
  */
 function mergeOne(dst, src) {
-  if (src === undefined) return dst;
-
-  // According to specification arrays must be concatenated. 'src' overrides 'dst'.
+  // According to specification arrays must be concatenated.
+  // Also, the '.concat' creates a new array instance to override the 'dst'.
   if (isArray(src)) return (isArray(dst) ? dst : []).concat(src);
 
   // Now deal with non plain 'src' object. 'src' overrides 'dst'
-  if (!isPlainObject(src)) return src; // src overwrites dst
+  // Note that functions are also assigned! We do not deep merge functions.
+  if (!isPlainObject(src)) return src;
 
-  return Object.keys(src).reduce(
-    (returnValue, key) => {
-      // deep merge each property. Recursion!
-      returnValue[key] = mergeOne(returnValue[key], src[key]);
-      return returnValue;
-    },
-    // See if 'dst' is allowed to be mutated. If not - it becomes a new plain object.
-    isMergeable(dst) ? dst : {}
-  );
+  // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
+  const returnValue = isMergeable(dst) ? dst : {};
+  Object.keys(src).forEach(key => {
+    // Do not merge properties with the 'undefined' value.
+    if (src[key] === undefined) return;
+    // deep merge each property. Recursion!
+    returnValue[key] = mergeOne(returnValue[key], src[key]);
+  });
+  return returnValue;
 }
 
 /**
