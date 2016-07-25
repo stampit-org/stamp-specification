@@ -141,31 +141,42 @@ The stamp descriptor properties are made available on each stamp as `stamp.compo
 
 * `methods` - A set of methods that will be added to the object's delegate prototype.
 * `properties` - A set of properties that will be added to new object instances by assignment.
-* `deepProperties` - A set of properties that will be added to new object instances by deep property merge, except arrays are concatenated.
+* `deepProperties` - A set of properties that will be added to new object instances by deep property merge.
 * `propertyDescriptors` - A set of [object property
 descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) used for fine-grained control over object property behaviors.
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
-* `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge, except arrays are concatenated.
+* `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `initializers` - An array of functions that will run in sequence. Stamp details and arguments get passed to initializers.
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. These will be copied by assignment.
-* `deepConfiguration` - A set of options made available to the stamp and its initializers during object instance creation. These will be deep merged, except arrays are concatenated.
+* `deepConfiguration` - A set of options made available to the stamp and its initializers during object instance creation. These will be deep merged.
 
 #### Composing Descriptors
 
 Descriptors are composed together to create new descriptors with the following rules:
 
-* `methods` are copied by assignment as in `Object.assign()`.
-* `properties` are copied by assignment as in `Object.assign()`.
-* `deepProperties` are deep merged, except arrays are concatenated.
-* `propertyDescriptors` are copied by assignment as in `Object.assign()`.
-* `staticProperties` are copied by assignment as in `Object.assign()`.
-* `staticDeepProperties` are deep merged, except arrays are concatenated
-* `staticPropertyDescriptors` are copied by assignment as in `Object.assign()`.
+* `methods` are copied by assignment
+* `properties` are copied by assignment
+* `deepProperties` are deep merged
+* `propertyDescriptors` are copied by assignment
+* `staticProperties` are copied by assignment
+* `staticDeepProperties` are deep merged
+* `staticPropertyDescriptors` are copied by assignment
 * `initializers` are uniquely concatenated as in `_.union()`.
-* `configuration` are copied by assignment as in `Object.assign()`.
-* `deepConfiguration` are deep merged, except arrays are concatenated.
+* `configuration` are copied by assignment
+* `deepConfiguration` are deep merged
 
+##### Copying by assignment
+
+The regular `Object.assign()` is used.
+
+##### Deep merging
+
+Special deep merging algorithm should be used when mergind descriptors:
+* The last object type always overwrite previous object type
+* Plain objects are deeply merged or cloned
+* Arrays are concatenated, elements should not be changed
+* Functions, Symbols, RegExp, etc. are copied by assignment
 
 #### Priority Rules
 
