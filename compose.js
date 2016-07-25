@@ -4,7 +4,7 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
 */
 
-import {isObject, isFunction, isPlainObject, assign, uniq, isArray} from 'lodash';
+import {isObject, isFunction, isPlainObject, assign, uniq, isArray, merge} from 'lodash';
 
 // Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
 const isMergeable = value => !isArray(value) && isObject(value);
@@ -19,12 +19,12 @@ const isStamp = value => isFunction(value) && isFunction(value.compose);
  * Mutate the 'dst' by deep merging the 'src'. Though, arrays are concatenated.
  * @param {*} dst The object to deep merge 'src' into.
  * @param {*} src The object to merge data from.
- * @returns {*} Typically it's the 'dst' itself. Unless it was an array, or a non-mergeable,
- * or the 'src' itself in case the 'src' is a non-mergeable.
+ * @returns {*} Typically it's the 'dst' itself. Unless it was an array, or a non-mergeable.
+ * Can also return the 'src' itself in case the 'src' is a non-mergeable.
  */
 function mergeOne(dst, src) {
   // According to specification arrays must be concatenated.
-  // Also, the '.concat' creates a new array instance to override the 'dst'.
+  // Also, the '.concat' creates a new array instance. Overrides the 'dst'.
   if (isArray(src)) return (isArray(dst) ? dst : []).concat(src);
 
   // Now deal with non plain 'src' object. 'src' overrides 'dst'
@@ -32,7 +32,7 @@ function mergeOne(dst, src) {
   if (!isPlainObject(src)) return src;
 
   // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
-  const returnValue = isMergeable(dst) ? dst : {};
+  const returnValue = isPlainObject(dst) ? dst : {};
   Object.keys(src).forEach(key => {
     // Do not merge properties with the 'undefined' value.
     if (src[key] === undefined) return;
@@ -44,13 +44,12 @@ function mergeOne(dst, src) {
 
 /**
  * Stamp specific deep merging algorithm.
- * @param {*} dst
- * @param {Array} srcs
+ * @param {*} dst This will be either mutated, or substituted.
+ * @param {Array} srcs Source bjects to merge form.
  * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
  * Or the 'src' itself if the 'src' is a non-mergeable.
  */
-export function merge(dst, ...srcs) {
-  // TODO: unit test the entire new algorithm!!!!
+export function mergeDescriptor(dst, ...srcs) {
   return srcs.reduce((target, src) => mergeOne(target, src), dst);
 }
 
@@ -138,13 +137,13 @@ function mergeComposable(dstDescriptor, srcComposable) {
 
   combineProperty('methods', assign);
   combineProperty('properties', assign);
-  combineProperty('deepProperties', merge);
+  combineProperty('deepProperties', mergeDescriptor);
   combineProperty('propertyDescriptors', assign);
   combineProperty('staticProperties', assign);
-  combineProperty('staticDeepProperties', merge);
+  combineProperty('staticDeepProperties', mergeDescriptor);
   combineProperty('staticPropertyDescriptors', assign);
   combineProperty('configuration', assign);
-  combineProperty('deepConfiguration', merge);
+  combineProperty('deepConfiguration', mergeDescriptor);
 
   if (isArray(srcDescriptor.initializers)) {
     // Initializers must be concatenated. '.concat' will also create a new array instance.
