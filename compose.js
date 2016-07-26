@@ -14,6 +14,19 @@ const isDescriptor = isMergeable;
 
 // Stamps are functions, which have `.compose` attached function.
 const isStamp = value => isFunction(value) && isFunction(value.compose);
+/**
+ * @typedef {Function} Stamp
+ * @property {Function} compose
+ * @property {Object} [compose.methods] Instance ptototype methods
+ * @property {Object} [compose.properties] Instance properties
+ * @property {Object} [compose.deepProperties] Instance deep merged properties
+ * @property {Object} [compose.propertyDescriptors] JavaScript property descriptors
+ * @property {Object} [compose.staticProperties] Stamp static properties
+ * @property {Object} [compose.staticDeepProperties] Stamp deep merged static properties
+ * @property {Object} [compose.staticPropertyDescriptors] Stamp JavaScript property descriptors
+ * @property {Object} [compose.configuration] Stamp configuration
+ * @property {Object} [compose.deepConfiguration] Stamp deep merged configuration
+ */
 
 /**
  * Mutate the 'dst' by deep merging the 'src'. Though, arrays are concatenated.
@@ -92,7 +105,7 @@ function createFactory(descriptor) {
  * Returns a new stamp given a descriptor and a compose function implementation.
  * @param {object} [descriptor={}] The information about the object the stamp will be creating.
  * @param {Function} composeFunction The "compose" function implementation.
- * @returns {Function}
+ * @returns {Stamp}
  */
 function createStamp(descriptor, composeFunction) {
   const Stamp = createFactory(descriptor);
@@ -148,7 +161,7 @@ function mergeComposable(dstDescriptor, srcComposable) {
   if (isArray(srcDescriptor.initializers)) {
     // Initializers must be concatenated. '.concat' will also create a new array instance.
     const dstInitializers = (dstDescriptor.initializers || []).concat(srcDescriptor.initializers);
-    // The resulting initializers array must contain function only, and
+    // The resulting initializers array must contain functions only, and
     // must not have duplicate initializers - the first occurrence wins.
     dstDescriptor.initializers = uniq(dstInitializers.filter(isFunction));
   }
@@ -160,11 +173,11 @@ function mergeComposable(dstDescriptor, srcComposable) {
  * Given the list of composables (stamp descriptors and stamps)
  * returns a new stamp (composable factory function).
  * @param {...(object|Function)} [composables] The list of composables.
- * @returns {Function} A new stamp (aka composable factory function).
+ * @returns {Stamp} A new stamp (aka composable factory function).
  */
 export default function compose(...composables) {
   // Merge metadata of all composables to a new plain object.
   const descriptor = [this].concat(composables).filter(isMergeable).reduce(mergeComposable, {});
-  // Pass self as the 'compose' implementation which will be used for `Stamp.compose()`
+  // Recursively pass this 'compose' implementation which will be used for `Stamp.compose()`
   return createStamp(descriptor, compose);
 }
