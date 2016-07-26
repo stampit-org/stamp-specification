@@ -172,7 +172,7 @@ The regular `Object.assign()` is used.
 
 ##### Deep merging
 
-Special deep merging algorithm should be used when mergind descriptors:
+Special deep merging algorithm should be used when merging descriptors:
 * The last object type always overwrite previous object type
 * Plain objects are deeply merged or cloned
 * Arrays are concatenated, elements should not be changed
