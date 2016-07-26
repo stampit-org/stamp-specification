@@ -71,19 +71,19 @@ function createFactory(descriptor) {
     // Run initializers sequentially.
     return (descriptor.initializers || [])
       .filter(isFunction)
-      .reduce((resultingObj, initializer) => {
+      .reduce((resultingInstance, initializer) => {
         // Invoke an initializer in the way specification tell us to.
         const returnedValue = initializer.call(
           // 'this' context will be the object instance itself
-          resultingObj,
+          resultingInstance,
           // the first argument passed from factory to initializer
           options,
           // special arguments. See specification.
-          {instance: resultingObj, stamp: Stamp, args: [options].concat(args)}
+          {instance: resultingInstance, stamp: Stamp, args: [options].concat(args)}
         );
 
         // Any initializer can override the object instance with basically anything.
-        return returnedValue === undefined ? resultingObj : returnedValue;
+        return returnedValue === undefined ? resultingInstance : returnedValue;
       }, obj);
   };
 }
