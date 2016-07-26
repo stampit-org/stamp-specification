@@ -61,12 +61,12 @@ export function mergeDescriptor(dst, ...srcs) {
 function createFactory(descriptor) {
   return function Stamp(options = {}, ...args) {
     // The 'methods' metadata object becomes the prototype for new object instances.
-    const obj = Object.create(descriptor.methods || {});
+    const instance = Object.create(descriptor.methods || {});
 
     // Deep merge, then override with shallow merged properties, then apply property descriptors.
-    merge(obj, descriptor.deepProperties);
-    assign(obj, descriptor.properties);
-    Object.defineProperties(obj, descriptor.propertyDescriptors || {});
+    merge(instance, descriptor.deepProperties);
+    assign(instance, descriptor.properties);
+    Object.defineProperties(instance, descriptor.propertyDescriptors || {});
 
     // Run initializers sequentially.
     return (descriptor.initializers || [])
@@ -84,7 +84,7 @@ function createFactory(descriptor) {
 
         // Any initializer can override the object instance with basically anything.
         return returnedValue === undefined ? resultingInstance : returnedValue;
-      }, obj);
+      }, instance);
   };
 }
 
