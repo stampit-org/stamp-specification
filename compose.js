@@ -5,6 +5,7 @@ The code is optimized to be as readable as possible.
 */
 
 import {isObject, isFunction, isPlainObject, uniq, isArray, merge} from 'lodash';
+
 const assign = Object.assign;
 
 // Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
