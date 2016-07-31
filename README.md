@@ -173,10 +173,11 @@ The regular `Object.assign()` is used.
 ##### Deep merging
 
 Special deep merging algorithm should be used when merging descriptors:
+* Similar to `Object.assign()` the `Symbol`s are treated as regular string keys
 * The last object type always overwrites the previous object type
 * Plain objects are deeply merged (or cloned if destination metadata property is not a plain object)
 * Arrays are concatenated using `Array.prototype.concat` which shallow copies elements to a new array instance
-* Functions, Symbols, RegExp, etc. are copied by reference
+* Functions, Symbols, RegExp, etc. values are copied by reference
 
 #### Priority Rules
 

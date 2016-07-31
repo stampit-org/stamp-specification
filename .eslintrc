@@ -1,6 +1,6 @@
 // Add our overrides as necessary
 {
-  "extends": "airbnb/base",
+  "extends": "airbnb-base",
   "rules": {
     "no-param-reassign": 0,
     "object-curly-spacing": [2, "never"],
