@@ -52,6 +52,15 @@ function mergeOne(dst, src) {
     // deep merge each property. Recursion!
     returnValue[key] = mergeOne(returnValue[key], src[key]);
   });
+
+  // Same for Symbols, if supported by environment
+  if (Object.getOwnPropertySymbols) {
+    Object.getOwnPropertySymbols(src).forEach(key => {
+      if (src[key] === undefined) return;
+      returnValue[key] = mergeOne(returnValue[key], src[key]);
+    });
+  }
+
   return returnValue;
 }
 
