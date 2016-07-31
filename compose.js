@@ -4,7 +4,8 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
 */
 
-import {isObject, isFunction, isPlainObject, assign, uniq, isArray, merge} from 'lodash';
+import {isObject, isFunction, isPlainObject, uniq, isArray, merge} from 'lodash';
+const assign = Object.assign;
 
 // Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
 const isMergeable = value => !isArray(value) && isObject(value);
