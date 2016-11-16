@@ -48,7 +48,7 @@ function mergeOne(dst, src) {
 
   // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
   const returnValue = isPlainObject(dst) ? dst : {};
-  Object.keys(src).forEach(key => {
+  Object.keys(src).forEach((key) => {
     // Do not merge properties with the 'undefined' value.
     if (src[key] === undefined) return;
     // deep merge each property. Recursion!
@@ -57,7 +57,7 @@ function mergeOne(dst, src) {
 
   // Same for Symbols, if supported by environment
   if (Object.getOwnPropertySymbols) {
-    Object.getOwnPropertySymbols(src).forEach(key => {
+    Object.getOwnPropertySymbols(src).forEach((key) => {
       if (src[key] === undefined) return;
       returnValue[key] = mergeOne(returnValue[key], src[key]);
     });
@@ -103,7 +103,7 @@ function createFactory(descriptor) {
           // the first argument passed from factory to initializer
           options,
           // special arguments. See specification.
-          {instance: resultingInstance, stamp: Stamp, args: [options].concat(args)}
+          {instance: resultingInstance, stamp: Stamp, args: [options].concat(args)},
         );
 
         // Any initializer can override the object instance with basically anything.
