@@ -79,13 +79,13 @@ export function mergeDescriptor(dst, ...srcs) {
 
 /**
  * Creates new factory instance.
- * @param {object} descriptor The information about the object the factory will be creating.
  * @returns {Function} The new factory function.
  */
-function createFactory(descriptor) {
+function createFactory() {
   return function Stamp(options = {}, ...args) {
+    const descriptor = Stamp.compose || {};
     // The 'methods' metadata object becomes the prototype for new object instances.
-    const instance = Object.create(descriptor.methods || {});
+    const instance = Object.create(descriptor.methods || null);
 
     // Deep merge, then override with shallow merged properties, then apply property descriptors.
     merge(instance, descriptor.deepProperties);
@@ -119,7 +119,7 @@ function createFactory(descriptor) {
  * @returns {Stamp}
  */
 function createStamp(descriptor, composeFunction) {
-  const Stamp = createFactory(descriptor);
+  const Stamp = createFactory();
 
   // Deep merge, then override with shallow merged properties, then apply property descriptors.
   merge(Stamp, descriptor.staticDeepProperties);
