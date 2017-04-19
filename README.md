@@ -1,5 +1,5 @@
 # Stamp Specification v1.4
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)![Greenkeeper Badge](https://badges.greenkeeper.io/stampit-org/stamp-specification.svg)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Greenkeeper Badge](https://badges.greenkeeper.io/stampit-org/stamp-specification.svg)
 
 ## Introduction
 
