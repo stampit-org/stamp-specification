@@ -19,7 +19,7 @@ const isStamp = value => isFunction(value) && isFunction(value.compose);
 /**
  * @typedef {Function} Stamp
  * @property {Function} compose
- * @property {Object} [compose.methods] Instance ptototype methods
+ * @property {Object} [compose.methods] Instance prototype methods
  * @property {Object} [compose.properties] Instance properties
  * @property {Object} [compose.deepProperties] Instance deep merged properties
  * @property {Object} [compose.propertyDescriptors] JavaScript property descriptors
