@@ -19,7 +19,7 @@ const isStamp = value => isFunction(value) && isFunction(value.compose);
 /**
  * @typedef {Function} Stamp
  * @property {Function} compose
- * @property {Object} [compose.methods] Instance ptototype methods
+ * @property {Object} [compose.methods] Instance prototype methods
  * @property {Object} [compose.properties] Instance properties
  * @property {Object} [compose.deepProperties] Instance deep merged properties
  * @property {Object} [compose.propertyDescriptors] JavaScript property descriptors
@@ -69,7 +69,7 @@ function mergeOne(dst, src) {
 /**
  * Stamp specific deep merging algorithm.
  * @param {*} dst This will be either mutated, or substituted.
- * @param {Array} srcs Source bjects to merge form.
+ * @param {Array} srcs Source Objects to merge form.
  * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
  * Or the 'src' itself if the 'src' is a non-mergeable.
  */
