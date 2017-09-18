@@ -69,7 +69,7 @@ function mergeOne(dst, src) {
 /**
  * Stamp specific deep merging algorithm.
  * @param {*} dst This will be either mutated, or substituted.
- * @param {Array} srcs Source bjects to merge form.
+ * @param {Array} srcs Source Objects to merge form.
  * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
  * Or the 'src' itself if the 'src' is a non-mergeable.
  */
