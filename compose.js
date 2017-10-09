@@ -150,14 +150,24 @@ function mergeComposable(dstDescriptor, srcComposable) {
   // Ignore everything but things we can merge.
   if (!isDescriptor(srcDescriptor)) return dstDescriptor;
 
-  const combineProperty = (propName, action) => {
+  function combineProperty(propName, action) {
     // Do not create destination properties if there is no need.
     if (!isDescriptor(srcDescriptor[propName])) return;
     // Check if the destination is malformed, fix the problem if any.
     if (!isDescriptor(dstDescriptor[propName])) dstDescriptor[propName] = {};
     // Deep merge or shallow assign objects.
     action(dstDescriptor[propName], srcDescriptor[propName]);
-  };
+  }
+
+  function concatAssignFunctions(propName) {
+    // Do not create destination properties if there is no need.
+    if (!isArray(srcDescriptor[propName])) return;
+    // Initializers must be concatenated. '.concat' will also create a new array instance.
+    const dstFunctions = (dstDescriptor[propName] || []).concat(srcDescriptor[propName]);
+    // The resulting array must contain functions only, and
+    // must not have duplicate them - the first occurrence wins.
+    dstDescriptor[propName] = uniq(dstFunctions.filter(isFunction));
+  }
 
   combineProperty('methods', assign);
   combineProperty('properties', assign);
@@ -169,13 +179,9 @@ function mergeComposable(dstDescriptor, srcComposable) {
   combineProperty('configuration', assign);
   combineProperty('deepConfiguration', mergeDescriptor);
 
-  if (isArray(srcDescriptor.initializers)) {
-    // Initializers must be concatenated. '.concat' will also create a new array instance.
-    const dstInitializers = (dstDescriptor.initializers || []).concat(srcDescriptor.initializers);
-    // The resulting initializers array must contain functions only, and
-    // must not have duplicate initializers - the first occurrence wins.
-    dstDescriptor.initializers = uniq(dstInitializers.filter(isFunction));
-  }
+  // Initializers and Composers must be concatenated.
+  concatAssignFunctions('initializers');
+  concatAssignFunctions('composers');
 
   return dstDescriptor;
 }
@@ -190,5 +196,15 @@ export default function compose(...composables) {
   // Merge metadata of all composables to a new plain object.
   const descriptor = [this].concat(composables).filter(isMergeable).reduce(mergeComposable, {});
   // Recursively pass this 'compose' implementation which will be used for `Stamp.compose()`
-  return createStamp(descriptor, compose);
+  const stamp = createStamp(descriptor, compose);
+
+  // Run composers sequentially.
+  return (stamp.compose.composers || [])
+  .filter(isFunction)
+  .reduce((resultingStamp, composer) => {
+    // Invoke a composer in the way specification tell us to.
+    const returnedValue = composer({stamp, composables});
+    // Any composer can override the object instance with another stamp.
+    return isStamp(returnedValue) ? returnedValue : resultingStamp;
+  }, stamp);
 }

@@ -1,4 +1,4 @@
-# Stamp Specification v1.4
+# Stamp Specification v1.5
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Greenkeeper Badge](https://badges.greenkeeper.io/stampit-org/stamp-specification.svg)
 
 ## Introduction
@@ -10,8 +10,9 @@ This specification exists in order to define a standard format for composable fa
 The specification is currently used by the following officially supported implementations:
 
 * [Reference Implementation](./compose.js)
-* [Stamp Utils](https://github.com/stampit-org/stamp-utils) Functional, microlibrary style stamp utilities.
+* [`@stamp`](https://www.npmjs.com/~stamp) Ecosystem of useful stamps
 * [Stampit 3.0](https://github.com/stampit-org/stampit) V3+ uses the stamp specification.
+* [Stamp Utils](https://github.com/stampit-org/stamp-utils) Functional, microlibrary style stamp utilities.
 * [react-stamp](https://github.com/troutowicz/react-stamp) A great choice for `class`-free React components.
 
 ### Reading Function Signatures
@@ -131,6 +132,7 @@ interface Descriptor {
   staticDeepProperties?: Object,
   staticPropertyDescriptors?: Object,
   initializers?: [...Function],
+  composers?: [...Function],
   configuration?: Object,
   deepConfiguration?: Object
 }
@@ -147,7 +149,8 @@ descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 * `staticProperties` - A set of static properties that will be copied by assignment to the stamp.
 * `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
-* `initializers` - An array of functions that will run in sequence. Stamp details and arguments get passed to initializers.
+* `initializers` - An array of functions that will run in sequence while creating an object instance from a stamp. Stamp details and arguments get passed to initializers.
+* `composers` - An array of functions that will run in sequence while creating a new stamp from a list of composables. The resulting stamp and the composables aget passed to composers. 
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. These will be copied by assignment.
 * `deepConfiguration` - A set of options made available to the stamp and its initializers during object instance creation. These will be deep merged.
 
@@ -163,6 +166,7 @@ Descriptors are composed together to create new descriptors with the following r
 * `staticDeepProperties` are deep merged
 * `staticPropertyDescriptors` are copied by assignment
 * `initializers` are uniquely concatenated as in `_.union()`.
+* `composers` are uniquely concatenated as in `_.union()`.
 * `configuration` are copied by assignment
 * `deepConfiguration` are deep merged
 
@@ -189,34 +193,6 @@ It is possible for properties to collide, between both stamps, and between diffe
 
 * Shallow properties override deep properties
 * Property Descriptors override everything
-
-#### Configuration
-
-Stamp composition and instance creation behaviors can be manipulated by configuration stamps. For example, it's possible to create [a stamp that warns on collisions](https://github.com/stampit-org/collision-stamp) across different descriptor properties. e.g.:
-
-**Configuration Example**
-
-```js
-import warnOnCollisions from 'collision-stamp';
-
-const config = compose({
-  deepConfiguration: {
-    collision: {
-      warnOnCollision: true,
-      warn (msg) {
-        const entry = JSON.stringify({
-          date: Date.now(),
-          message: msg
-        });
-        this.collision.loggers.forEach(log => log(entry));
-      },
-      loggers: [console.log]
-    }
-  }
-});
-
-const myStamp = compose(config, warnOnCollisions);
-```
 
 
 ### Stamp Arguments
@@ -283,7 +259,7 @@ myDBQueue = DbQueue({
 Initializers have the following signature:
 
 ```js
-(options: Object, { instance: Object, stamp: Stamp, args: Array }) => instance: Object
+(options: Object, { instance: Object, stamp: Stamp, args: Array }) => instance?: Object
 ```
 
 * `options` The `options` argument passed into the stamp, containing properties that may be used by initializers.
@@ -292,6 +268,17 @@ Initializers have the following signature:
 * `args` An array of the arguments passed into the stamp, including the `options` argument.
 
 Note that if no `options` object is passed to the factory function, an empty object will be passed to initializers.
+
+### Composer Parameters
+
+Composers have the following signature:
+
+({ stamp: Stamp, composables: Composable[] }) => stamp?: Object
+
+* `stamp` The result of the composables composition.
+* `composables` The list of composables the `stamp` was just composed of.
+
+Note that it's not recommended to return new stamps from a composer. Instead, it's better to mutate the passed `stamp`.
 
 -----
 
