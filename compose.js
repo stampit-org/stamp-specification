@@ -162,7 +162,7 @@ function mergeComposable(dstDescriptor, srcComposable) {
   function concatAssignFunctions(propName) {
     // Do not create destination properties if there is no need.
     if (!isArray(srcDescriptor[propName])) return;
-    // Initializers must be concatenated. '.concat' will also create a new array instance.
+    // Initializers/composers must be concatenated. '.concat' will also create a new array instance.
     const dstFunctions = (dstDescriptor[propName] || []).concat(srcDescriptor[propName]);
     // The resulting array must contain functions only, and
     // must not have duplicate them - the first occurrence wins.
