@@ -150,7 +150,7 @@ descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 * `staticDeepProperties` - A set of static properties that will be added to the stamp by deep property merge.
 * `staticPropertyDescriptors` - A set of [object property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) to apply to the stamp.
 * `initializers` - An array of functions that will run in sequence while creating an object instance from a stamp. Stamp details and arguments get passed to initializers.
-* `composers` - An array of functions that will run in sequence while creating a new stamp from a list of composables. The resulting stamp and the composables aget passed to composers. 
+* `composers` - An array of functions that will run in sequence while creating a new stamp from a list of composables. The resulting stamp and the composables get passed to composers. 
 * `configuration` - A set of options made available to the stamp and its initializers during object instance creation. These will be copied by assignment.
 * `deepConfiguration` - A set of options made available to the stamp and its initializers during object instance creation. These will be deep merged.
 
