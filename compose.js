@@ -193,8 +193,10 @@ function mergeComposable(dstDescriptor, srcComposable) {
  * @returns {Stamp} A new stamp (aka composable factory function).
  */
 export default function compose(...composables) {
+  // Prepend `this` if invoked via Stamp.compose()
+  if (this) composables.unshift(this);
   // Merge metadata of all composables to a new plain object.
-  const descriptor = [this].concat(composables).filter(isMergeable).reduce(mergeComposable, {});
+  const descriptor = composables.filter(isMergeable).reduce(mergeComposable, {});
   // Recursively pass this 'compose' implementation which will be used for `Stamp.compose()`
   const stamp = createStamp(descriptor, compose);
 
