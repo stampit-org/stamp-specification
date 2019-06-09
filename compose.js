@@ -4,7 +4,9 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
 */
 
-import {isObject, isFunction, isPlainObject, uniq, isArray, merge} from 'lodash';
+import lodash from 'lodash';
+
+const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = lodash;
 
 const assign = Object.assign;
 
@@ -201,9 +203,7 @@ export default function compose(...composables) {
   const stamp = createStamp(descriptor, compose);
 
   // Run composers sequentially.
-  return (stamp.compose.composers || [])
-  .filter(isFunction)
-  .reduce((resultingStamp, composer) => {
+  return (stamp.compose.composers || []).filter(isFunction).reduce((resultingStamp, composer) => {
     // Invoke a composer in the way specification tell us to.
     const returnedValue = composer({stamp, composables});
     // Any composer can override the object instance with another stamp.
