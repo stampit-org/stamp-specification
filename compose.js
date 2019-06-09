@@ -6,7 +6,7 @@ The code is optimized to be as readable as possible.
 
 import lodash from 'lodash';
 
-const { isObject, isFunction, isPlainObject, uniq, isArray, merge } = lodash;
+const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = lodash;
 
 const assign = Object.assign;
 
@@ -50,7 +50,7 @@ function mergeOne(dst, src) {
 
   // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
   const returnValue = isPlainObject(dst) ? dst : {};
-  Object.keys(src).forEach(key => {
+  Object.keys(src).forEach((key) => {
     // Do not merge properties with the 'undefined' value.
     if (src[key] === undefined) return;
     // deep merge each property. Recursion!
@@ -59,7 +59,7 @@ function mergeOne(dst, src) {
 
   // Same for Symbols, if supported by environment
   if (Object.getOwnPropertySymbols) {
-    Object.getOwnPropertySymbols(src).forEach(key => {
+    Object.getOwnPropertySymbols(src).forEach((key) => {
       if (src[key] === undefined) return;
       returnValue[key] = mergeOne(returnValue[key], src[key]);
     });
@@ -105,7 +105,7 @@ function createFactory() {
           // the first argument passed from factory to initializer
           options,
           // special arguments. See specification.
-          { instance: resultingInstance, stamp: Stamp, args: [options].concat(args) }
+          {instance: resultingInstance, stamp: Stamp, args: [options].concat(args)},
         );
 
         // Any initializer can override the object instance with basically anything.
@@ -131,7 +131,7 @@ function createStamp(descriptor, composeFunction) {
   // Determine which 'compose' implementation to use.
   const composeImplementation = isFunction(Stamp.compose) ? Stamp.compose : composeFunction;
   // Make a copy of the 'composeImplementation' function.
-  Stamp.compose = function(...args) {
+  Stamp.compose = function (...args) {
     return composeImplementation.apply(this, args);
   };
   // Assign descriptor properties to the new metadata holder.
@@ -203,9 +203,11 @@ export default function compose(...composables) {
   const stamp = createStamp(descriptor, compose);
 
   // Run composers sequentially.
-  return (stamp.compose.composers || []).filter(isFunction).reduce((resultingStamp, composer) => {
+  return (stamp.compose.composers || [])
+  .filter(isFunction)
+  .reduce((resultingStamp, composer) => {
     // Invoke a composer in the way specification tell us to.
-    const returnedValue = composer({ stamp, composables });
+    const returnedValue = composer({stamp, composables});
     // Any composer can override the object instance with another stamp.
     return isStamp(returnedValue) ? returnedValue : resultingStamp;
   }, stamp);
