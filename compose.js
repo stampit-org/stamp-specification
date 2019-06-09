@@ -4,7 +4,8 @@ See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
 */
 
-import {isObject, isFunction, isPlainObject, uniq, isArray, merge} from 'lodash';
+import lodash from 'lodash';
+const {isObject, isFunction, isPlainObject, uniq, isArray, merge}=lodash;
 
 const assign = Object.assign;
 
