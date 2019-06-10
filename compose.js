@@ -8,7 +8,13 @@ import lodash from 'lodash';
 
 const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = lodash;
 
-const assign = Object.assign;
+// const assign = Object.assign; fix getter/setter bug.
+const assign = (ob, obj) => {
+  if (typeof obj !== 'undefined') {
+    return Object.defineProperties(ob, Object.getOwnPropertyDescriptors(obj));
+  }
+  return ob;
+};
 
 // Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
 const isMergeable = value => !isArray(value) && isObject(value);
