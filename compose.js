@@ -9,10 +9,13 @@ import lodash from 'lodash';
 const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = lodash;
 
 // const assign = Object.assign; fix getter/setter bug.
-const assign = (ob, obj) => {
-  if (typeof obj !== 'undefined') {
-    return Object.defineProperties(ob, Object.getOwnPropertyDescriptors(obj));
-  }
+const assign = (ob, ...o) => {
+  o.forEach((obj) => {
+    if (typeof obj !== 'undefined') {
+      Object.defineProperties(ob, Object.getOwnPropertyDescriptors(obj));
+    }
+  });
+
   return ob;
 };
 
