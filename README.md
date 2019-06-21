@@ -172,12 +172,16 @@ Descriptors are composed together to create new descriptors with the following r
 
 ##### Copying by assignment
 
-The regular `Object.assign()` is used.
+The special property assignment algorithm shallow merges the following properties:
+* The regular string value properties `obj.foo = "bla"`
+* The `Symbol` value properties `obj[Symbol.for('foo')] = "bla"`
+* The JavaScript getters and setters `{ get foo() { return "foo"; }, set foo(val) { ... } }`
 
 ##### Deep merging
 
 Special deep merging algorithm should be used when merging descriptors:
-* Similar to `Object.assign()` the `Symbol`s are treated as regular string keys
+* The `Symbol`s are treated as regular string keys
+* The JavaScript getters and setters are merged as if they are regular properties
 * The last object type always overwrites the previous object type
 * Plain objects are deeply merged (or cloned if destination metadata property is not a plain object)
 * Arrays are concatenated using `Array.prototype.concat` which shallow copies elements to a new array instance

@@ -3,12 +3,29 @@ This is an example implementation of the Stamp Specifications.
 See https://github.com/stampit-org/stamp-specification
 The code is optimized to be as readable as possible.
 */
+'use strict'; // eslint-disable-line
 
-import lodash from 'lodash';
+const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = require('lodash');
 
-const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = lodash;
+function getOwnPropertyKeys(obj) {
+  return Object.getOwnPropertyNames(obj)
+  .concat(Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(obj) : []);
+}
 
-const assign = Object.assign;
+function assign(dst, src) {
+  if (src != null) {
+    // We need to copy regular properties, symbols, getters and setters.
+    const keys = getOwnPropertyKeys(src);
+    for (let i = 0; i < keys.length; i += 1) {
+      const desc = Object.getOwnPropertyDescriptor(src, keys[i]);
+      // Make sure we can override any future getter/setter
+      desc.configurable = true;
+      Object.defineProperty(dst, keys[i], desc);
+    }
+  }
+
+  return dst;
+}
 
 // Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
 const isMergeable = value => !isArray(value) && isObject(value);
@@ -50,20 +67,21 @@ function mergeOne(dst, src) {
 
   // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
   const returnValue = isPlainObject(dst) ? dst : {};
-  Object.keys(src).forEach((key) => {
-    // Do not merge properties with the 'undefined' value.
-    if (src[key] === undefined) return;
-    // deep merge each property. Recursion!
-    returnValue[key] = mergeOne(returnValue[key], src[key]);
-  });
-
-  // Same for Symbols, if supported by environment
-  if (Object.getOwnPropertySymbols) {
-    Object.getOwnPropertySymbols(src).forEach((key) => {
-      if (src[key] === undefined) return;
+  // List both: regular value properties, and getters/setters. Object.keys() lists only regular
+  getOwnPropertyKeys(src).forEach((key) => {
+    const desc = Object.getOwnPropertyDescriptor(src, key);
+    // is this a regular property?
+    if (desc.hasOwnProperty('value')) { // eslint-disable-line
+      // Do not merge properties with the 'undefined' value.
+      if (desc.value === undefined) return;
+      // deep merge each property. Recursion!
       returnValue[key] = mergeOne(returnValue[key], src[key]);
-    });
-  }
+    } else { // nope, it looks like a getter/setter
+      // Make it rewritable because two stamps can have same named getter/setter
+      desc.configurable = true;
+      Object.defineProperty(returnValue, key, desc);
+    }
+  });
 
   return returnValue;
 }
@@ -75,7 +93,7 @@ function mergeOne(dst, src) {
  * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
  * Or the 'src' itself if the 'src' is a non-mergeable.
  */
-export function mergeDescriptor(dst, ...srcs) {
+function mergeDescriptor(dst, ...srcs) {
   return srcs.reduce((target, src) => mergeOne(target, src), dst);
 }
 
@@ -194,7 +212,7 @@ function mergeComposable(dstDescriptor, srcComposable) {
  * @param {...(object|Function)} [composables] The list of composables.
  * @returns {Stamp} A new stamp (aka composable factory function).
  */
-export default function compose(...composables) {
+module.exports = function compose(...composables) {
   // Prepend `this` if invoked via Stamp.compose()
   if (this) composables.unshift(this);
   // Merge metadata of all composables to a new plain object.
@@ -209,4 +227,4 @@ export default function compose(...composables) {
     // Any composer can override the object instance with another stamp.
     return isStamp(returnedValue) ? returnedValue : resultingStamp;
   }, stamp);
-}
+};

@@ -2,11 +2,9 @@
   "name": "stamp-specification",
   "version": "1.5.1",
   "description": "The Composables specification and example implementation",
-  "main": "build/compose.js",
+  "main": "compose.js",
   "scripts": {
-    "build": "babel -s -d build compose.js",
     "lint": "eslint compose.js",
-    "pretest": "npm run build",
     "test": "check-compose .",
     "prepublish": "npm run lint && npm test"
   },
@@ -28,19 +26,12 @@
   },
   "homepage": "https://github.com/stampit-org/stamp-specification#readme",
   "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-preset-env": "^1.6.0",
-    "check-compose": "^3.1.2",
+    "check-compose": "^5.0.0",
     "eslint": "^3.2.0",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0"
   },
   "dependencies": {
     "lodash": "^4.5.1"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
   }
 }
