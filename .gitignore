@@ -6,7 +6,8 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
-
+.nyc_output
+package-lock.json
 
 
 ##### node.js
