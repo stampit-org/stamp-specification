@@ -8,8 +8,7 @@ The code is optimized to be as readable as possible.
 const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = require('lodash');
 
 function getOwnPropertyKeys(obj) {
-  return Object.getOwnPropertyNames(obj)
-  .concat(Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(obj) : []);
+  return Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertySymbols(obj));
 }
 
 function assign(dst, src) {
@@ -27,11 +26,8 @@ function assign(dst, src) {
   return dst;
 }
 
-// Specification says that ARRAYS ARE NOT mergeable. They must be concatenated only.
-const isMergeable = value => !isArray(value) && isObject(value);
-
 // Descriptor is typically a function or a plain object. But not an array!
-const isDescriptor = isMergeable;
+const isDescriptor = value => !isArray(value) && isObject(value);
 
 // Stamps are functions, which have `.compose` attached function.
 const isStamp = value => isFunction(value) && isFunction(value.compose);
@@ -216,7 +212,7 @@ module.exports = function compose(...composables) {
   // Prepend `this` if invoked via Stamp.compose()
   if (this) composables.unshift(this);
   // Merge metadata of all composables to a new plain object.
-  const descriptor = composables.filter(isMergeable).reduce(mergeComposable, {});
+  const descriptor = composables.reduce(mergeComposable, {});
   // Recursively pass this 'compose' implementation which will be used for `Stamp.compose()`
   const stamp = createStamp(descriptor, compose);
 
