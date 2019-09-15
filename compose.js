@@ -5,7 +5,7 @@ The code is optimized to be as readable as possible.
 */
 'use strict'; // eslint-disable-line
 
-const {isObject, isFunction, isPlainObject, uniq, isArray, merge} = require('lodash');
+const {isObject, isFunction, isPlainObject, uniq, isArray} = require('lodash');
 
 function getOwnPropertyKeys(obj) {
   return Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertySymbols(obj));
@@ -17,8 +17,6 @@ function assign(dst, src) {
     const keys = getOwnPropertyKeys(src);
     for (let i = 0; i < keys.length; i += 1) {
       const desc = Object.getOwnPropertyDescriptor(src, keys[i]);
-      // Make sure we can override any future getter/setter
-      desc.configurable = true;
       Object.defineProperty(dst, keys[i], desc);
     }
   }
@@ -61,8 +59,6 @@ function mergeOne(dst, src) {
   // Note that functions are also assigned! We do not deep merge functions.
   if (!isPlainObject(src)) return src;
 
-  // See if 'dst' is allowed to be mutated. If not - it's overridden with a new plain object.
-  const returnValue = isPlainObject(dst) ? dst : {};
   // List both: regular value properties, and getters/setters. Object.keys() lists only regular
   getOwnPropertyKeys(src).forEach((key) => {
     const desc = Object.getOwnPropertyDescriptor(src, key);
@@ -70,16 +66,17 @@ function mergeOne(dst, src) {
     if (desc.hasOwnProperty('value')) { // eslint-disable-line
       // Do not merge properties with the 'undefined' value.
       if (desc.value === undefined) return;
+
+      const srcValue = src[key];
+      const newDst = isPlainObject(dst[key]) || isArray(srcValue) ? dst[key] : {};
       // deep merge each property. Recursion!
-      returnValue[key] = mergeOne(returnValue[key], src[key]);
+      dst[key] = mergeOne(newDst, srcValue);
     } else { // nope, it looks like a getter/setter
-      // Make it rewritable because two stamps can have same named getter/setter
-      desc.configurable = true;
-      Object.defineProperty(returnValue, key, desc);
+      Object.defineProperty(dst, key, desc);
     }
   });
 
-  return returnValue;
+  return dst;
 }
 
 /**
@@ -89,7 +86,7 @@ function mergeOne(dst, src) {
  * @returns {*} Typically it's the 'dst' itself, unless it was an array or a non-mergeable.
  * Or the 'src' itself if the 'src' is a non-mergeable.
  */
-function mergeDescriptor(dst, ...srcs) {
+function merge(dst, ...srcs) {
   return srcs.reduce((target, src) => mergeOne(target, src), dst);
 }
 
@@ -187,13 +184,13 @@ function mergeComposable(dstDescriptor, srcComposable) {
 
   combineProperty('methods', assign);
   combineProperty('properties', assign);
-  combineProperty('deepProperties', mergeDescriptor);
+  combineProperty('deepProperties', merge);
   combineProperty('propertyDescriptors', assign);
   combineProperty('staticProperties', assign);
-  combineProperty('staticDeepProperties', mergeDescriptor);
+  combineProperty('staticDeepProperties', merge);
   combineProperty('staticPropertyDescriptors', assign);
   combineProperty('configuration', assign);
-  combineProperty('deepConfiguration', mergeDescriptor);
+  combineProperty('deepConfiguration', merge);
 
   // Initializers and Composers must be concatenated.
   concatAssignFunctions('initializers');
