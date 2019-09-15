@@ -1,4 +1,4 @@
-# Stamp Specification v1.5
+# Stamp Specification v1.6
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/stampit-org/stampit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Greenkeeper Badge](https://badges.greenkeeper.io/stampit-org/stamp-specification.svg)
 
 ## Introduction
@@ -172,16 +172,24 @@ Descriptors are composed together to create new descriptors with the following r
 
 ##### Copying by assignment
 
-The regular `Object.assign()` is used.
+The special property assignment algorithm shallow merges the following properties:
+* The regular string key properties `obj.foo = "bla"`
+* The `Symbol` key properties `obj[Symbol.for('foo')] = "bla"`
+* The JavaScript getters and setters `{ get foo() { return "bla"; }, set foo(val) { ... } }`
 
 ##### Deep merging
 
-Special deep merging algorithm should be used when merging descriptors:
-* Similar to `Object.assign()` the `Symbol`s are treated as regular string keys
-* The last object type always overwrites the previous object type
+Special deep merging algorithm should be used when merging descriptors.
+
+Values:
 * Plain objects are deeply merged (or cloned if destination metadata property is not a plain object)
 * Arrays are concatenated using `Array.prototype.concat` which shallow copies elements to a new array instance
-* Functions, Symbols, RegExp, etc. values are copied by reference
+* All other value types - Functions, Strings, non-plain objects, RegExp, etc. - are copied by reference
+* The last value type always overwrites the previous value type
+
+Keys:
+* The `Symbol` object keys are treated as regular string keys
+* The JavaScript getters and setters are merged as if they are regular functions, i.e. copied by reference
 
 #### Priority Rules
 
