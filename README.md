@@ -281,7 +281,9 @@ Note that if no `options` object is passed to the factory function, an empty obj
 
 Composers have the following signature:
 
+```js
 ({ stamp: Stamp, composables: Composable[] }) => stamp?: Object
+```
 
 * `stamp` The result of the composables composition.
 * `composables` The list of composables the `stamp` was just composed of.
